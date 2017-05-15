@@ -1,0 +1,79 @@
+	var countIndex = 0;
+            //1.将当前商品的信息写入goods对象
+            var goods = {
+                imgurl:$('#picture').src,
+                name:$('.spName').html(),
+                x_price:$('.x_price').html(),
+                y_price:$('.y_price').html(),
+                xiangou:false,
+                qty:1
+            }
+			//购物车页面的加减，判断是否限购
+			$('.jian').on('click',function(){
+			    if(countIndex === 1){
+			        $('.shuliang').html(1);
+				}else{
+			        countIndex--;
+			        $('.shuliang').html(countIndex);
+				}
+			});
+			$('.jia').on('click',function(){
+
+			    if(countIndex === 10){
+			        $('.shuliang').html(10);
+				}else{
+			        countIndex++;
+                    $('.shuliang').html(countIndex);
+				}
+			});
+            //点击inCar时完成飞入效果，并将商品信息写入cookie
+			$('#inCar').on('click',function(e){
+			    //飞入购物车效果
+                var offset = $('.count').offset(),
+					flyer = $('<img class="u-flyer" src="../images/details/fei.jpg"/>');
+                flyer.fly({
+                    start: {
+                        left: e.clientX,
+                        top: e.clientY -window.scrollY
+                    },
+                    end: {
+                        left: offset.left,
+                        top: offset.top - window.scrollY,
+                        width: 20,
+                        height: 20
+                    }
+                });
+				//在有加入购物车这个事件后获取数量值，要注意，在循环外获取，否则第一次加入购物车的数量一直是1
+                goods.qty = parseInt($('.shuliang').html());
+				//2.现读取carlist中的cookie
+                var carlist = getCookie('carlist');
+                carlist = carlist ? JSON.parse(carlist) : [];
+				//3设置一个变量判断当前cookie中是否有该商品
+				var　hasGoods = false;
+				//4遍历carlist,查看cookie中是否有和当前商品图片路径一致的
+				for(var i=0;i<carlist.length;i++){
+					if(carlist[i].imgurl === goods.imgurl){
+					    hasGoods = true;
+						carlist[i].qty += goods.qty;
+						//判断是否限购//限购10件
+						if(good.xiangou){
+                            carlist[i].qty>10 ? 10 :carlist[i].qty;
+						}else{
+						    carlist[i].qty = carlist[i].qty;
+						}
+					    break;
+					}
+				}
+				//5如果当前cookie中没有，则将goods加入carlist里
+				if(!hasGoods){
+
+				    carlist.push(goods);
+				    //购物车图表上计数商品种类的值
+				    $('.count').html(carlist.length);
+				}
+				//6将carlist转成Json字符串存入cookie
+                setCookie('carlist',JSON.stringify(carlist));
+
+				console.log(carlist);
+
+			});

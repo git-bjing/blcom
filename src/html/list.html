@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>百联 列表页</title>
+	<link rel="stylesheet" href="../css/index-header.css">
+	<link rel="stylesheet" href="../css/index-foot.css">
+	<link rel="stylesheet" href="../css/list.css">
+	<link rel="stylesheet" href="../css/index-right-slidebar.css">
+	<script src="../js/lib/jquery-3.2.1.js"></script>
+	<script src="../js/common.js"></script>
+	<script>
+		$(function(){
+			//右侧边栏，点击弹出
+			
+			var sli1 = false;
+			$('.xinxi').on('click',function(){
+				if(!sli1){
+					$('#rside').animate({right:0},'fast');
+					sli1 = true;
+				}else {
+					$('#rside').animate({right:-276},'fast');
+					sli1 = false;
+				}
+			})
+
+			var sli2 = false;
+			$('.right-slidebar-car').on('click',function(){
+				if(!sli2){
+					$('#rside').animate({right:0},'fast');
+					$('.right-slidebar-right-car').animate({top:0});
+					sli2 = true;
+				}else {
+					$('#rside').animate({right:-276},'fast');
+					$('.right-slidebar-right-car').animate({top:685});
+					sli2 = false;
+				}
+			})
+
+			var sli3 = false;
+			$('.shoucang').on('click',function(){
+				if(!sli3){
+					$('#rside').animate({right:0},'fast');
+					sli3 = true;
+				}else {
+					$('#rside').animate({right:-276},'fast');
+					sli3 = false;
+				}
+			})
+
+			var sli4 = false;
+			$('.liulanlishi').on('click',function(){
+				if(!sli4){
+					$('#rside').animate({right:0},'fast');
+					sli4 = true;
+				}else {
+					$('#rside').animate({right:-276},'fast');
+					sli4 = false;
+				}
+			})
+
+			
+
+			//滚动鼠标分页加载，为什么不能续接显示 而是在同样的位置刷新？
+			//怎样把数据库中的数据转换成json文件？？？？？
+			// var listBody = document.getElementsByClassName('listBody')[0];
+			// //每页显示10条
+			// var qty = 10;
+
+			// //当前分页
+			// var pageNo = 1;
+
+			// //分页总数
+			// var pageLen;
+
+			// var xhr = new XMLHttpRequest();
+			// xhr.onreadystatechange = function(){
+			// 	if(xhr.readyState === 4 && xhr.status === 200){
+			// 		var res = JSON.parse(xhr.responseText);
+			// 		console.log(xhr.responseText)
+			// 		var listBodyContentUl = document.getElementById('listBodyContentUl');
+					
+			// 		//计算分页数量
+			// 		pageLen = Math.ceil(res.total/qty);
+
+			// 		listBodyContentUl.innerHTML = res.data.map((item)=>{
+			// 			return `<li>
+			// 			<img src="${item.img}" alt="">
+			// 			<span>${item.price}</span>
+			// 			<span>${item.ckprice}</span>
+			// 			<a href="#">${item.proname}</a>
+			// 		</li>`
+			// 		}).join('');
+
+			// 		pageNo++;
+			// 	}
+			// }
+			// xhr.open('get','http://localhost/bl_com/php/ljzproduct.php?pageNo=' + pageNo,true);
+			// xhr.send();
+			
+
+			// // 滚动加载更多
+			// window.onscroll = ()=>{
+			// 	// 如何判断滚动到底部？
+			// 	var scrollTop = window.scrollY;//document.body.scrollTop/document.documentElement.scrollTop
+			// 	//判断接近底部时
+			// 	if(scrollTop >= listBody.offsetHeight - window.innerHeight - 100){
+			// 		if(pageNo<=pageLen){
+						
+			// 			xhr.open('get','http://localhost/bl_com/php/ljzproduct.php?pageNo=' + pageNo,true);
+			// 			xhr.send();
+			// 		}
+					
+			// 	}
+			// }
+
+			//通过数据库生成列表页的商品列表 所有详细信息写了29条，因为时间不够了。。。 后面的数据只存了大图 小图没存
+			$.get('../php/product.php', function(response){
+				var obj = $.parseJSON(response);
+				$listBodyContentUl = $('.listBodyContent ul');
+				
+
+				for (var i = 0; i < obj.length; i++) {
+					console.log(obj[i])
+					var li = $('<li/>');
+					li.html(`<img src="${obj[i].img}" alt="">
+						<span>￥${obj[i].price}</span>
+						<span>参考价￥${obj[i].ckprice}</span>
+						<a href="details.html?id=${obj[i].productid}">${obj[i].proname}</a>`);
+					$listBodyContentUl.append(li);
+				}
+
+			})
+
+
+			//倒计时时间
+			var timeLeft = document.getElementsByClassName('jsq-djs')[0];
+			console.log(timeLeft)
+			//截止时间
+			var end = Date.parse('2017/6/1 10:21:50');
+			//页面刷新显示时间
+			showTimeLeft();
+			var timer = setInterval(showTimeLeft,1000);
+			function showTimeLeft(){
+				// 得到当前时间的毫秒数
+			 	var now = Date.now();
+			 	// 把当前时间与秒杀时间进行对比
+			 	var offsetTime = Math.floor((end - now)/1000);
+			 	// 如果时间到了秒杀时间
+			 	if(offsetTime <= 0){
+			 		clearInterval(timer);
+			 		// 删除剩余时间
+			 		timeLeft.style.display = 'none';
+			 	}
+			 	var secLeft = offsetTime%60;
+			 	var minLeft = Math.floor(offsetTime/60)%60;
+			 	var hourLeft = Math.floor(offsetTime/60/60)%24;
+			 	var dayLeft = Math.floor(offsetTime/60/60/24);
+			 	timeLeft.innerHTML = '还剩' + dayLeft + '天' + hourLeft + '时' + minLeft + '分' + secLeft + '秒';
+			 }
+
+
+
+			//侧边栏购物车显示  
+			
+			var slidebarSeen = getCookie('carlist');
+			slidebarSeen = slidebarSeen ? JSON.parse(slidebarSeen) : [];
+			//把cookie中的内容写入rightBody
+			var totalTotalPrice = 0;
+			
+			$('.slinum').html(slidebarSeen.length);
+		    //以上代码要在读取cookie的时候再写入，才不会变
+		    	
+			for(var j = 0; j<= slidebarSeen.length-1; j++){
+				var li = $('<li/>');
+				var object = slidebarSeen[j];
+				object.price = object.price.replace(',','');
+				console.log(parseInt(object.price))
+				var totalprice = parseInt(object.price) * parseInt(object.qty);
+				li.html(`<img src="${object.imgurl}" alt="" class="imgProductId">
+					<span>
+						<span class="detailsName">${object.name}</span>
+						<span class="detailsPrice">￥${object.price} &times; ${object.qty}</span>
+					</span>
+					<span class="totalPrice">￥${totalprice}</span>`)
+				
+				$('.rightBodyUl').append(li);
+
+				totalTotalPrice += totalprice;
+				$('.totalTotalPrice').html(`￥${totalTotalPrice}`)
+
+
+				console.log(slidebarSeen)
+			}
+
+
+
+
+			 //点击购物车 去到购物车
+			$('.goTocar').on('click',function(){
+				window.location.href = 'http://localhost/bl_com/html/car.html#';
+			})
+
+			//点击logo 回到首页
+			$('.goHome').on('click',function(){
+				window.location.href = 'http://localhost/bl_com/index.html#';
+			})
+
+		})
+	</script>
+</head>
+<body>
+	<header id="top">
+		<div class="tools">
+			<div class="container">
+				<ul class="toolsLeft">
+					<li>
+						<i class="iconfont icon-fill1fill2"></i>
+						<p><span>百联集团旗下全渠道电商平台</span></p>
+					</li>
+					<li>
+						<a href="#">网站导航</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li><a href="#">百联集团官网</a></li>
+							<li><a href="#">安付宝网</a></li>
+							<li><a href="#">第一医药</a></li>
+							<li><a href="#">OK会员卡专区</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">消息</a>
+					</li>
+				</ul>
+				<ul class="toolsRight">
+					<li>
+						<i class="iconfont icon-denglu"></i>
+						<span>
+							<a href="http://localhost/bl_com/html/log.html#">请登录</a>
+						</span>
+						<span>
+							<a href="http://localhost/bl_com/html/register.html#">注册</a>
+						</span>
+					</li>
+					<li>
+						<a href="#">我的订单</a>
+					</li>
+					<li>
+						<a href="#">我的百联</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li><a href="#">我的订单</a></li>
+							<li><a href="#">我的评价</a></li>
+							<li><a href="#">我的积分</a></li>
+							<li><a href="#">我的收藏</a></li>
+							<li><a href="#">我的优惠券</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">充值缴费</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li>
+								<p>水电煤缴费</p>
+								<ul>
+									<li><a href="#">缴费首页</a></li>
+									<li><a href="#">水费缴费</a></li>
+									<li><a href="#">电费缴费</a></li>
+									<li><a href="#">燃气缴费</a></li>
+								</ul>
+							</li>
+							<li>
+								<p>手机充值</p>
+								<ul>
+									<li><a href="#">手机充值</a></li>
+									<li><a href="#">流量充值</a></li>
+									<li><a href="#">更多充值</a></li>
+								</ul>
+							</li>
+							<li>
+								<p>其他缴费</p>
+								<ul>
+									<li><a href="#">加油卡充值</a></li>
+									<li><a href="#">固话/宽带充值</a></li>
+									<li><a href="#">铁通缴费</a></li>
+									<li><a href="#">有限电视缴费</a></li>
+								</ul>
+							</li>
+							<li>
+								<p>游戏点卡</p>
+								<ul>
+									<li><a href="#">腾讯Q币充值</a></li>
+									<li><a href="#">盛大点券充值</a></li>
+									<li><a href="#">游戏中心</a></li>
+									<li><a href="#">更多游戏</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">客户服务</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li><a href="#">在线客服</a></li>
+							<li><a href="#">帮助中心</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">掌上百联</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<span>
+							<img src="../image/index-erweima.jpg">
+							<p>i百联APP</p>
+							<p>手机购物更方便</p>
+						</span>
+					</li>
+					<li>
+						<a href="http://localhost/bl_com/html/car.html#">购物车</a>
+					</li>
+					<li>
+						<a href="#">关注我们</a>
+						<i class="iconfont icon-iconfontweibowukuang"></i>
+						<i class="iconfont icon-weixin"></i>
+						<ul>
+							<li>
+								<img src="../image/index-weibo.png">
+								<p>点击关注</p>
+								<p>i百联新浪微博</p>
+							</li>
+							<li>
+								<img src="../image/index-weixingongzhonghao.png">
+								<p>扫一扫关注</p>
+								<p>i百联微信公众号</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="header">
+			<div class="container">
+				<div class="headerLogo">
+					<img src="../image/header-logo.png" class="goHome">
+				</div>
+				<div class="searchBox">
+					<div class="searchTop">
+						<input type="text">
+						<button type="submit"><i class="iconfont icon-sousuo_sousuo"></i></button>
+					</div>
+					<div class="searchFoot">
+						<a href="#">特色中国</a>
+						<span>|</span>
+						<a href="#">茶饮料</a>
+						<span>|</span>
+						<a href="#">婴儿奶粉</a>
+						<span>|</span>
+						<a href="#">太阳镜</a>
+						<span>|</span>
+						<a href="#">行车记录仪</a>
+						<span>|</span>
+						<a href="#">华为畅享7plus</a>
+						<span>|</span>
+						<a href="#">鲜花</a>
+						<span>|</span>
+						<a href="#">洗发水</a>
+						<span>|</span>
+						<a href="#">阿迪达斯</a>
+					</div>
+				</div>
+				<div class="anfubao">
+					<a href="#">安付宝OK专区<i class="iconfont icon-xiangyoujiantou"></i></a>
+
+				</div>
+			</div>
+		</div>
+	</header>
+	<div class="banner">
+		<div class="banner-top">
+			<ul>
+				<li><a href="#">闪购首页</a></li>
+				<li><a href="#">美妆配饰</a></li>
+				<li><a href="#">母婴童装</a></li>
+				<li><a href="#">服饰运动</a></li>
+				<li><a href="#">鞋靴箱包</a></li>
+				<li><a href="#">数码家电</a></li>
+				<li><a href="#">居家生活</a></li>
+				<li><a href="#">生鲜美食</a></li>
+				<li><a href="#">全球购</a></li>
+				<li><a href="#">特卖尚新</a></li>
+			</ul>
+			<div>
+				<img src="../image/list/tiansuo.jpg" alt="">
+				<div>
+					<span>
+						<span>
+							<p>2100</p>
+							<p>元起</p>
+						</span>
+						<span>满520减120</span>
+					</span>
+					<span class="jsq">
+						<span>仅剩时间：</span>
+						<span class="jsq-djs"></span>
+					</span>
+				</div>
+				<div>
+					<span>微信</span>
+					<span>新浪</span>
+					<span>空间</span>
+					<span>腾讯</span>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="banner-tu">
+				<img src="../image/list/list-datu.jpg" alt="">
+				<div>
+					<span>———  全球购  ———</span>
+					<span>天梭TISSOT</span>
+					<span>满520减120</span>
+				</div>
+			</div>
+			<div class="banner-foot">
+				<span>分类</span>
+				<ul>
+					<li><a href="#">所有商品</a></li>
+					<li><a href="#">珠宝饰品/手表眼镜</a></li>
+					<li><a href="#">手表</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="listBody">
+		<div class="container">
+			<div class="listBodyTop">
+				<span>综合排序</span>
+				<span>
+					<span>价格</span>
+					<i class="iconfont icon-tab"></i>
+				</span>
+				<span>
+					<input type="checkbox">
+					仅显示有货
+				</span>
+			</div>
+			<div class="listBodyContent">
+				<ul id="listBodyContentUl">
+					<!-- <li>
+						<img src="../image/list/watch1.jpg" alt="">
+						<span>￥2,550</span>
+						<span>参考价 ￥3,219</span>
+						<a href="#">天梭TISSOT俊雅系列石英男表T063 .610.36.037.00 瑞士进口</a>
+					</li> -->
+				</ul>
+			</div>
+			<div class="remaituijian">
+				<div>
+					<img src="../image/list/remaituijian.png" alt="">
+				</div>
+				<div>
+					<ul>
+						<li>
+							<a href="#">
+								<img src="../image/list/remai-1.jpg" alt="">
+								<span>浪琴 Longines</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<img src="../image/list/remai-2.jpg" alt="">
+								<span>PRADA普拉达</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<img src="../image/list/remai-3.jpg" alt="">
+								<span>Chloe克洛伊</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<img src="../image/list/remai-4.jpg" alt="">
+								<span>雷朋RayBan</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<img src="../image/list/remai-5.jpg" alt="">
+								<span>英纳格ENICAR</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<img src="../image/list/remai-6.jpg" alt="">
+								<span>MIUMIU缪缪</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<img src="../image/list/remai-7.jpg" alt="">
+								<span>Dolce&Gabbana</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<img src="../image/list/remai-8.jpg" alt="">
+								<span>Dior迪奥</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<img src="../image/list/remai-9.jpg" alt="">
+								<span>美度MIDO</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer id="foot">
+		<div class="list">
+			<ul>
+				<li class="list-1">
+					<div>
+						<span>
+							<i class="iconfont icon-denglu"></i>
+						</span>
+						<span>新手入门</span>
+					</div>
+					<ul>
+						<li>购物流程</li>
+						<li>会员介绍</li>
+						<li>常见问题</li>
+						<li>发票说明</li>
+						<li>练习客服</li>
+					</ul>
+				</li>
+				<li class="list-2">
+					<div>
+						<span>
+							<i class="iconfont icon-peisong"></i>
+						</span>
+						<span>配送服务</span>
+					</div>
+					<ul>
+						<li>配送范围及运费</li>
+						<li>配送进度查询</li>
+						<li>自提服务</li>
+						<li>商品验货与签收</li>
+					</ul>
+				</li>
+				<li class="list-3">
+					<div>
+						<span>
+							<i class="iconfont icon-zhifufangshi-copy"></i>
+						</span>
+						<span>支付方式</span>
+					</div>
+					<ul>
+						<li>货到付款</li>
+						<li>在线支付</li>
+					</ul>
+				</li>
+				<li class="list-4">
+					<div>
+						<span>
+							<i class="iconfont icon-shouhoufuwu"></i>
+						</span>
+						<span>售后服务</span>
+					</div>
+					<ul>
+						<li>退换货政策</li>
+						<li>退换货流程</li>
+						<li>退款说明</li>
+					</ul>
+				</li>
+				<li class="list-5">
+					<div>
+						<span>
+							<i class="iconfont icon-shengxianshipin"></i>
+						</span>
+						<span>特色服务</span>
+					</div>
+					<ul>
+						<li>优鲜集市</li>
+						<li>生鲜随心订</li>
+						<li>精选篮筐</li>
+						<li>全球购</li>
+						<li>精品闪购</li>
+						<li>百联到家</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div class="footer-foot">
+			<ul>
+				<li>
+					<span><a href="#">关于我们</a></span>
+					<span>|</span>
+					<span><a href="#">联系我们</a></span>
+					<span>|</span>
+					<span><a href="#">加盟合作</a></span>
+					<span>|</span>
+					<span>诚征英才</span>
+					<span>|</span>
+					<span>友情链接</span>
+				</li>
+				<li>
+					<span>百联集团有限公司旗下 上海百联全渠道电子商务有限公司版权所有</span>
+					<span>|</span>
+					<span>客服电话：400-900-8800 </span>
+					<span>|</span>
+					<span>沪ICP备15028847号</span>
+				</li>
+				<li>
+					<a href="#">互联网药品信息服务资质证书编号：沪-（非营业性）-2016-0044</a>
+				</li>
+				<li>
+					<ul>
+						<li>
+							<img src="../image/index-foot-gongan.png" alt="">
+							<a href="#">沪公网安备 310101020022366号</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-wangjing.png" alt="">
+							<a href="#">网购大家评</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-gongs.png" alt="">
+							<a href="#">上海工商</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-zhizhao.png" alt="">
+							<a href="#">经营执照</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</footer>
+	<div class="right-slidebar" id="rside">
+		<div class="right-slidebar-left" id="rsidein">
+			<div class="right-slidebar-login xinxi">
+				<i class="iconfont icon-user"></i>
+				<span>我的信息</span>
+			</div>
+			<div class="right-slidebar-car">
+				<i class="iconfont icon-peisong"></i>
+				<span>购<br>物<br>车</span>
+				<span class="slinum slinum1">0</span>
+			</div>
+			<div class="right-slidebar-login shoucang">
+				<i class="iconfont icon-shoucang"></i>
+				<span>我的收藏</span>
+			</div>
+			<div class="right-slidebar-login liulanlishi">
+				<i class="iconfont icon-lishijilu"></i>
+				<span>浏览历史</span>
+			</div>
+			<div class="right-slidebar-login zhuanxiang">
+				<i class="iconfont icon-shoucang"></i>
+				<span>
+					<i class="iconfont icon-shoujishuma"></i>
+					<span>手机APP专享</span>
+					<img src="../image/index-weixingongzhonghao.png" alt="">
+				</span>
+			</div>
+			<div class="right-slidebar-login kefu">
+				<i class="iconfont icon-lishijilu"></i>
+				<span>我的客服</span>
+			</div>
+		</div>
+		<div class="right-slidebar-right">
+			<div class="right-slidebar-right-car">
+				<div class="rightTop">
+					<i class="iconfont icon-xiangyoujiantou"></i>
+					<a href="#"><i class="iconfont icon-gouwuchekong"></i></a>
+				</div>
+				<div class="rightBody">
+					<ul class="rightBodyUl">
+						<!-- <li>
+							<img src="../image/list/watch1.png" alt="" class="imgProductId">
+							<span>
+								<span class="detailsName">天梭TISSOT 力洛克系列钢带机械男表 T006.428.22.038.01 瑞士进口</span>
+								<span class="detailsPrice">￥4358.00 &times; 1</span>
+							</span>
+							<span class="totalPrice">￥4358.00</span>
+						</li> -->
+					</ul>
+				</div>
+				<div class="rightFoot">
+					<div>
+						<span>共</span>
+						<span  class="slinum slinum2">0</span>
+						<span>件商品，总计:</span>
+						<span class="totalTotalPrice">￥0</span>
+					</div>
+					<button class="goTocar">查看购物车</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

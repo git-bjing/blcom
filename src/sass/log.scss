@@ -1,0 +1,65 @@
+@import 'common';
+
+header{
+	height: 150px;width: 100%;
+	padding-top:40px;padding-left:80px;
+	&>img,&>div{display:block;float:left;}
+	&>div{width: 500px;height: 60px;
+		margin-left:30px;padding-left:30px;
+		border-left:1px solid #DDDDDD;line-height: 60px;
+		&>h2{font-weight:normal;font-family:"微软雅黑";font-size:25px;}
+	}
+}
+.content{
+	width: 100%;
+	height: 470px;
+	&>img:first-child{float:left;}
+	&>div{float:left;height: 460px;width: 499px;
+		border:6px solid #DDDDDD;}
+	&>img:last-child{float:right;}
+	.login{
+		padding-top:50px;
+		padding-left:85px;
+		position:relative;
+		&>div:first-child{
+			width: 319px;height: 50px;
+			span{display:block;font-size:19px;
+				width: 100px;float:left;}
+			a{display:block;width: 65px;height: 19px;
+				padding-top:3px;
+				color:#87D2FF;float:right;}
+		}
+		input{width: 319px;margin-bottom:21px;
+			border:1px solid #ddd;
+			height: 35px;}
+		input:hover{border:1px solid #bbb;}
+		i:nth-child(3){
+			position:absolute;color:#ddd;
+			top:108px;left:381px;
+		}
+		i:nth-child(5){
+			position:absolute;color:#ddd;
+			top:164px;left:381px;
+		}
+		&>a{display:block;width: 60px;
+			margin-bottom:19px;margin-left:262px;}
+		&>a:hover{color:#87D2FF;text-decoration:underline;}
+		button{width: 319px;margin-bottom:21px;
+			color:white;background-color:$mainColor;
+			border:1px solid $mainColor;
+			border-radius:3%;
+			height: 35px;font-size:16px;font-weight:bold;}
+		&>span{color:#bbb;}
+		&>div:last-child{
+			span{display:block;height: 43px;width: 83px;float:left;margin-top:21px;}
+			span:nth-child(1){background: url("../image/log-middle-w1.png") no-repeat;}
+			span:nth-child(1):hover{background: url("../image/log-middle-b1.png") no-repeat;}
+			span:nth-child(2){background: url("../image/log-middle-w2.png") no-repeat;}
+			span:nth-child(2):hover{background: url("../image/log-middle-b2.png") no-repeat;}
+			span:nth-child(3){background: url("../image/log-middle-w3.png") no-repeat;}
+			span:nth-child(3):hover{background: url("../image/log-middle-b3.png") no-repeat;}
+			span:nth-child(4){background: url("../image/log-middle-w4.png") no-repeat;}
+			span:nth-child(4):hover{background: url("../image/log-middle-b4.png") no-repeat;}
+		}
+	}
+}

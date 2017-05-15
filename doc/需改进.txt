@@ -1,0 +1,5 @@
+1、设bannerTop right的z-index:-99;
+2、search下面关键字的hover样式
+3、bannerBody right 里面的文字hover样式
+4、bannerTop left的鼠标移入移除事件bug
+5、轮播图li的定位（现在是列向排列，需要重叠排列，但是没办法定位。。。。）

@@ -1,0 +1,803 @@
+@charset "UTF-8";
+html {
+  height: 100%;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, a, input, img, ul, li, ol, dl, dt, dd {
+  padding: 0;
+  margin: 0;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img {
+  display: block;
+  border: 0;
+}
+
+input {
+  outline: none;
+}
+
+header, footer, section, nav {
+  display: block;
+}
+
+body {
+  font-size: 12px;
+  font-family: "微软雅黑";
+}
+
+a {
+  text-decoration: none;
+  color: #565656;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.body {
+  background-color: white;
+}
+
+.container {
+  width: 1210px;
+  margin: 0 auto;
+}
+
+.clearfix:after {
+  content: "";
+  height: 0;
+  display: block;
+  clear: both;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+@font-face {
+  font-family: "iconfont";
+  src: url("../font/font1/iconfont.eot?t=1493984161453");
+  /* IE9*/
+  src: url("../font/font1/iconfont.eot?t=1493984161453#iefix") format("embedded-opentype"), url("../font/font1/iconfont.woff?t=1493984161453") format("woff"), url("../font/font1/iconfont.ttf?t=1493984161453") format("truetype"), url("../font/font1/iconfont.svg?t=1493984161453#iconfont") format("svg");
+  /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-chuanchengshejiiconzitihua01:before {
+  content: "\e70d";
+}
+
+.icon-shoucang:before {
+  content: "\f0114";
+}
+
+.icon-denglu:before {
+  content: "\e621";
+}
+
+.icon-jiajujiafang:before {
+  content: "\e60a";
+}
+
+.icon-03:before {
+  content: "\e67a";
+}
+
+.icon-muyingwanju:before {
+  content: "\e628";
+}
+
+.icon-666:before {
+  content: "\e607";
+}
+
+.icon-fill1fill2:before {
+  content: "\e637";
+}
+
+.icon-552cc1af8017a:before {
+  content: "\e601";
+}
+
+.icon-shishang:before {
+  content: "\e603";
+}
+
+.icon-lipinqia:before {
+  content: "\e602";
+}
+
+.icon-jiayouqia:before {
+  content: "\e66a";
+}
+
+.icon-peisong:before {
+  content: "\e612";
+}
+
+.icon-3cshuma:before {
+  content: "\e60f";
+}
+
+.icon-yzshouhoufuwu:before {
+  content: "\e6da";
+}
+
+.icon-zhifufangshi-copy:before {
+  content: "\e600";
+}
+
+.icon-shouhoufuwu:before {
+  content: "\e65e";
+}
+
+.icon-lishijilu:before {
+  content: "\e605";
+}
+
+.icon-gehuhuazhuang:before {
+  content: "\e61a";
+}
+
+.icon-liuliang-:before {
+  content: "\e60d";
+}
+
+@font-face {
+  font-family: "iconfont";
+  src: url("../font/font2/iconfont.eot?t=1493984494546");
+  /* IE9*/
+  src: url("../font/font2/iconfont.eot?t=1493984494546#iefix") format("embedded-opentype"), url("../font/font2/iconfont.woff?t=1493984494546") format("woff"), url("../font/font2/iconfont.ttf?t=1493984494546") format("truetype"), url("../font/font2/iconfont.svg?t=1493984494546#iconfont") format("svg");
+  /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-94:before {
+  content: "\e67e";
+}
+
+.icon-shoujishuma:before {
+  content: "\e608";
+}
+
+.icon-guhua:before {
+  content: "\e63e";
+}
+
+.icon-shengxianshipin:before {
+  content: "\e600";
+}
+
+.icon-muyingwanju:before {
+  content: "\e628";
+}
+
+.icon-xiangbaofuxue:before {
+  content: "\e601";
+}
+
+.icon-meironghuli:before {
+  content: "\f0059";
+}
+
+.icon-unie61a:before {
+  content: "\e63f";
+}
+
+.icon-zhipin:before {
+  content: "\e635";
+}
+
+.icon-huafeichongzhi:before {
+  content: "\e633";
+}
+
+.icon-weibiaoti2fuzhi09:before {
+  content: "\e617";
+}
+
+.icon-qicheyongpin:before {
+  content: "\e864";
+}
+
+.icon-index-cion:before {
+  content: "\e63c";
+}
+
+.icon-sheshichufangyongju:before {
+  content: "\e643";
+}
+
+.icon-dianfei:before {
+  content: "\e68f";
+}
+
+.icon-huanfu1:before {
+  content: "\e621";
+}
+
+.icon-icon_lipinka:before {
+  content: "\e616";
+}
+
+.icon-jiushuiyinliao:before {
+  content: "\e757";
+}
+
+.icon-ranqifei:before {
+  content: "\e634";
+}
+
+.icon-shuifei:before {
+  content: "\e636";
+}
+
+@font-face {
+  font-family: "iconfont";
+  src: url("../font/font3/iconfont.eot?t=1493984744315");
+  /* IE9*/
+  src: url("../font/font3/iconfont.eot?t=1493984744315#iefix") format("embedded-opentype"), url("../font/font3/iconfont.woff?t=1493984744315") format("woff"), url("../font/font3/iconfont.ttf?t=1493984744315") format("truetype"), url("../font/font3/iconfont.svg?t=1493984744315#iconfont") format("svg");
+  /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-jiantouxiangzuo:before {
+  content: "\e643";
+}
+
+.icon-weixin:before {
+  content: "\e603";
+}
+
+.icon-iconfontweibowukuang:before {
+  content: "\e661";
+}
+
+.icon-ananzuiconv265:before {
+  content: "\e604";
+}
+
+.icon-xiangyoujiantou:before {
+  content: "\e6c8";
+}
+
+.icon-user:before {
+  content: "\e609";
+}
+
+@font-face {
+  font-family: "iconfont";
+  src: url("../font/font4/iconfont.eot?t=1494122015431");
+  /* IE9*/
+  src: url("../font/font4/iconfont.eot?t=1494122015431#iefix") format("embedded-opentype"), url("../font/font4/iconfont.woff?t=1494122015431") format("woff"), url("../font/font4/iconfont.ttf?t=1494122015431") format("truetype"), url("../font/font4/iconfont.svg?t=1494122015431#iconfont") format("svg");
+  /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-sousuo_sousuo:before {
+  content: "\e601";
+}
+
+@font-face {
+  font-family: "iconfont";
+  src: url("../font/font5/iconfont.eot?t=1494128279835");
+  /* IE9*/
+  src: url("../font/font5/iconfont.eot?t=1494128279835#iefix") format("embedded-opentype"), url("../font/font5/iconfont.woff?t=1494128279835") format("woff"), url("../font/font5/iconfont.ttf?t=1494128279835") format("truetype"), url("../font/font5/iconfont.svg?t=1494128279835#iconfont") format("svg");
+  /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-tab:before {
+  content: "\e60c";
+}
+
+@font-face {
+  font-family: "iconfont";
+  src: url("../font/font6/iconfont.eot?t=1494295457732");
+  /* IE9*/
+  src: url("../font/font6/iconfont.eot?t=1494295457732#iefix") format("embedded-opentype"), url("../font/font6/iconfont.woff?t=1494295457732") format("woff"), url("../font/font6/iconfont.ttf?t=1494295457732") format("truetype"), url("../font/font6/iconfont.svg?t=1494295457732#iconfont") format("svg");
+  /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-gouwuchekong:before {
+  content: "\f0179";
+}
+
+.icon-shoppingcart:before {
+  content: "\e689";
+}
+
+.icon-youjian:before {
+  content: "\e705";
+}
+
+.icon-dianzan:before {
+  content: "\f010d";
+}
+
+.icon-shouji:before {
+  content: "\e878";
+}
+
+.icon-dingdan:before {
+  content: "\e622";
+}
+
+.icon-mima:before {
+  content: "\e655";
+}
+
+.icon-yonghuming:before {
+  content: "\e75a";
+}
+
+.icon-lajixiang:before {
+  content: "\e62a";
+}
+
+.icon-youjian1:before {
+  content: "\e652";
+}
+
+.icon-huan:before {
+  content: "\e666";
+}
+
+.icon-fukuanchenggong01:before {
+  content: "\e618";
+}
+
+.icon-fukuan:before {
+  content: "\e757";
+}
+
+.bannerTop {
+  background-color: #F5F5F5;
+  height: 34px;
+  border-bottom: 1px solid #707070;
+  width: 100%;
+}
+
+.bannerTop .container > div {
+  float: left;
+}
+
+.bannerTop .container > div:first-child {
+  color: white;
+  z-index: 999;
+  width: 190px;
+  height: 34px;
+  background-color: #363131;
+  position: relative;
+}
+
+.bannerTop .container > div:first-child > i {
+  font-size: 14px;
+  line-height: 34px;
+  margin-left: 15px;
+}
+
+.bannerTop .container > div:first-child > span {
+  font-size: 14px;
+  line-height: 34px;
+  margin-left: 15px;
+}
+
+.bannerTop .container > div:first-child .navSearch {
+  height: 425px;
+  width: 190px;
+  background-color: #E6133C;
+  position: absolute;
+  top: 34px;
+  left: 0;
+  padding-left: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul {
+  height: 405px;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li {
+  height: 29px;
+  padding-left: 5px;
+  padding-top: 6px;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > i {
+  display: block;
+  float: left;
+  width: 20px;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > a {
+  display: block;
+  float: left;
+  color: white;
+  text-align: left;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div {
+  position: absolute;
+  top: 0;
+  left: 180px;
+  z-index: -100;
+  height: 425px;
+  width: 780px;
+  background-color: #F5F5F5;
+  padding: 10px;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div > ul {
+  width: 570px;
+  float: left;
+  height: 100%;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div > ul > li {
+  display: block;
+  float: left;
+  width: 280px;
+  position: relative;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div > ul > li > span {
+  color: black;
+  display: block;
+  margin: 10px;
+  height: 20px;
+  line-height: 20px;
+  font-weight: bold;
+  width: 250px;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div > ul > li > span > a:hover {
+  text-decoration: underline;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div > ul > li > div {
+  margin: 10px;
+  width: 250px;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div > ul > li > div > a {
+  display: inline-block;
+  margin: 2px;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div > ul > li > div > a:hover {
+  color: #E6133C;
+  text-decoration: underline;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div > ul > li > div > span {
+  color: black;
+  display: inline-block;
+  margin: 2px;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div > div {
+  width: 190px;
+  float: right;
+  height: 100%;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li:hover {
+  background-color: #F5F5F5;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li:hover > i {
+  color: #E6133C;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li:hover > a {
+  color: #E6133C;
+  text-decoration: underline;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div {
+  opacity: 0;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li > div {
+  display: none;
+}
+
+.bannerTop .container > div:first-child .navSearch > ul > li .showDiv {
+  display: block;
+}
+
+.bannerTop .container > div:last-child {
+  width: 1020px;
+  position: relative;
+}
+
+.bannerTop .container > div:last-child > a {
+  display: block;
+  float: left;
+  text-align: center;
+}
+
+.bannerTop .container > div:last-child > a > img:hover {
+  display: block;
+  height: 33px;
+  border-bottom: 1px solid #E6133C;
+}
+
+.bannerTop .container > div:last-child > a:nth-child(1) {
+  width: 110px;
+  padding-left: 20px;
+}
+
+.bannerTop .container > div:last-child > a:nth-child(2) {
+  width: 110px;
+  padding-left: 20px;
+}
+
+.bannerTop .container > div:last-child > a:nth-child(3) {
+  width: 130px;
+  padding-left: 20px;
+}
+
+.bannerTop .container > div:last-child > a:nth-child(4) {
+  width: 160px;
+  padding-left: 20px;
+}
+
+.bannerTop .container > div:last-child > a:nth-child(5) {
+  width: 100px;
+  padding-left: 20px;
+}
+
+.bannerTop .container > div:last-child > a:nth-child(6) {
+  width: 110px;
+  padding-left: 20px;
+}
+
+.bannerTop .container > div:last-child > a:nth-child(7) {
+  display: block;
+  width: 90px;
+  height: 33px;
+  line-height: 34px;
+  font-size: 14px;
+  color: #333333;
+}
+
+.bannerTop .container > div:last-child > a:nth-child(7):hover {
+  color: #E6133C;
+  border-bottom: 1px solid #E6133C;
+}
+
+.bannerTop .container > div:last-child > a:nth-child(8) {
+  position: absolute;
+  right: 0;
+  top: -37px;
+  width: 215px;
+  float: right;
+}
+
+.bannerBody {
+  height: 425px;
+}
+
+.bannerBody .container {
+  height: 100%;
+  position: relative;
+}
+
+.bannerBody .container .carousel {
+  width: 100%;
+  height: 100%;
+  float: left;
+  position: absolute;
+  left: 190px;
+  top: 0;
+}
+
+.bannerBody .container .carousel {
+  position: relative;
+  margin: 0 auto;
+  width: 810px;
+  height: 320px;
+  overflow: hidden;
+}
+
+.bannerBody .container .carousel > ul {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.bannerBody .container .carousel > ul > li {
+  position: absolute;
+}
+
+.bannerBody .container .carousel > ul > li > img {
+  width: 100%;
+}
+
+.bannerBody .container .carousel > li.horizontal {
+  float: left;
+}
+
+.bannerBody .container .carousel > li.fade {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.bannerBody .container .page {
+  position: absolute;
+  right: 300px;
+  bottom: 30px;
+}
+
+.bannerBody .container .page span {
+  display: inline-block;
+  margin: 0 5px;
+  width: 10px;
+  height: 10px;
+  line-height: 30px;
+  text-align: center;
+  background-color: #efefef;
+  border-radius: 50%;
+}
+
+.bannerBody .container .page span.active {
+  background-color: #E6133C;
+  color: #fff;
+}
+
+.bannerBody .container .prev, .bannerBody .container .next {
+  position: absolute;
+  top: 130px;
+  height: 60px;
+  width: 30px;
+  line-height: 60px;
+  text-align: center;
+  background-color: #ddd;
+  color: #fff;
+}
+
+.bannerBody .container .prev {
+  left: 0;
+  opacity: 0;
+}
+
+.bannerBody .container .next {
+  right: 0;
+  opacity: 0;
+}
+
+.bannerBody .container .server {
+  width: 234px;
+  height: 100%;
+  float: right;
+  border-radius: 3%;
+  background-color: #F5F5F5;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.bannerBody .container .server .serverTop {
+  padding-top: 10px;
+}
+
+.bannerBody .container .server .serverTop > div > div > img {
+  display: block;
+  width: 98px;
+  height: 32px;
+  float: left;
+  margin-left: 15px;
+}
+
+.bannerBody .container .server .serverTop > div > div > a {
+  display: block;
+  width: 30px;
+  height: 32px;
+  line-height: 32px;
+  float: right;
+}
+
+.bannerBody .container .server .serverTop > div > div > i {
+  display: block;
+  float: right;
+  width: 15px;
+  height: 32px;
+  font-size: 8px;
+  line-height: 32px;
+  margin-right: 15px;
+}
+
+.bannerBody .container .server .serverTop > div > ul {
+  display: block;
+  float: left;
+  margin-left: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.bannerBody .container .server .serverTop > div > ul li {
+  line-height: 20px;
+}
+
+.bannerBody .container .server .serverBottom {
+  padding-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.bannerBody .container .server .serverBottom > span {
+  display: block;
+  width: 60px;
+  height: 69px;
+  float: left;
+  padding-top: 5px;
+  text-align: center;
+}
+
+.bannerBody .container .server .serverBottom > span > i {
+  display: block;
+  width: 40px;
+  height: 25px;
+  font-size: 24px;
+  margin-left: 9px;
+  margin-bottom: 3px;
+}
+
+.bannerBody .container .server .serverBottom > span:hover {
+  color: #E6133C;
+}
+
+.bannerBody .container .server .serverBottom > span:hover > a {
+  color: #E6133C;
+}

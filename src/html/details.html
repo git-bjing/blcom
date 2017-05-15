@@ -1,0 +1,3641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>详情页</title>
+	<link rel="stylesheet" href="../css/index-header.css">
+	<link rel="stylesheet" href="../css/details.css">
+	<link rel="stylesheet" href="../css/index-foot.css">
+	<link rel="stylesheet" href="../css/index-right-slidebar.css">
+	<link rel="stylesheet" href="../css/jquery.gdszoom.css">
+	<script src="../js/lib/jquery-3.2.1.js"></script>
+	<script src="../js/jquery.bjcarousel.js"></script>
+	<script src="../js/jquery.gdszoom.js"></script>
+	<script src="../js/jquery.fly.js"></script>
+	<script src="../js/jquery.fly.min.js"></script> 
+	<script src="../js/common.js"></script>
+	<style>
+	
+	</style>
+	<script>
+		$(function(){
+
+			//bannerTop菜单
+			var $fileLi = $('.navSearch>ul>li');
+			var $fileDiv = $('.navSearch>ul>li>div');
+			
+			$fileLi.each(function(idx,ele){
+				$(ele).on('mouseenter',function(){
+					$('>div', ele).addClass('showDiv').animate({opacity:1,left:190}).on('mouseenter', function(){$(this).show()
+					});
+				}).on('mouseleave',function(){
+					$('>div', ele).removeClass('showDiv').animate({opacity:0,left:180});
+					return false;
+						$(ele).timer = setTimeout(function(){
+							$('>div', ele).removeClass('showDiv').animate({opacity:0,left:180}).on('mouseleave', function(){$(this).hide();	})					
+						},500);
+				})
+			});
+			
+
+			//右侧边栏，点击弹出
+			
+			var sli1 = false;
+			$('.xinxi').on('click',function(){
+				if(!sli1){
+					$('#rside').animate({right:0},'fast');
+					sli1 = true;
+				}else {
+					$('#rside').animate({right:-276},'fast');
+					sli1 = false;
+				}
+			})
+
+			var sli2 = false;
+			$('.right-slidebar-car').on('click',function(){
+				if(!sli2){
+					$('#rside').animate({right:0},'fast');
+					$('.right-slidebar-right-car').animate({top:0});
+					sli2 = true;
+				}else {
+					$('#rside').animate({right:-276},'fast');
+					$('.right-slidebar-right-car').animate({top:685});
+					sli2 = false;
+				}
+			})
+
+			var sli3 = false;
+			$('.shoucang').on('click',function(){
+				if(!sli3){
+					$('#rside').animate({right:0},'fast');
+					sli3 = true;
+				}else {
+					$('#rside').animate({right:-276},'fast');
+					sli3 = false;
+				}
+			})
+
+			var sli4 = false;
+			$('.liulanlishi').on('click',function(){
+				if(!sli4){
+					$('#rside').animate({right:0},'fast');
+					sli4 = true;
+				}else {
+					$('#rside').animate({right:-276},'fast');
+					sli4 = false;
+				}
+			})
+
+
+
+			//切换每个ditails页面的商品信息 通过请求数据库
+			var big_proa=location.search
+            var big_id=big_proa.split('=')[1]
+            var productid;
+             $.ajax({
+                    url: '../php/product.php',
+                    // data:{regname:_username},
+                    success: function(data) {
+                        //fx(JSON.parse(data))
+                        //console.log(JSON.parse(data))
+                    var obj = JSON.parse(data);
+                    
+                     for(var i = 0;i<=obj.length-1;i++){
+                     	//console.log(obj[i])
+                     	if(parseInt(obj[i].productid) == big_id){
+                     		$('.imgProductId').attr("src",obj[i].img);
+                     		$('.imgProductId').attr("data-big",obj[i].img);
+                     		$('.imgId1').attr("src",`../image/list/watch${obj[i].productid}-1.jpg`);
+                     		$('.imgId2').attr("src",`../image/list/watch${obj[i].productid}-2.jpg`);
+                     		$('.imgId3').attr("src",`../image/list/watch${obj[i].productid}-3.jpg`);
+                     		$('.imgId4').attr("src",`../image/list/watch${obj[i].productid}-4.jpg`);
+                     		$('.detailsName').html(obj[i].proname);
+                     		$('.detailsPrice').html(obj[i].price);
+                     	}
+                     }
+                }
+            });
+
+
+
+
+			//放大镜
+			$('.zoom').gdszoom({
+				position:'right',
+			});
+
+			$('.small-list').on('click','img',function(){
+				$('.zoom img').attr({
+					src:this.src,
+					'data-big':this.src
+				});
+			})
+
+
+
+			//标签切换
+			var LacationTab = document.getElementsByClassName('LacationTab')[0];
+			var tab = document.getElementsByClassName('tab')[0];
+			var title = tab.firstElementChild.children;
+			var content = tab.lastElementChild.children;
+			var closeNum = false;
+			LacationTab.onclick = function(){
+				if(!closeNum){
+					tab.style.display = 'block';	
+					closeNum = true;
+				}else{
+					tab.style.display = 'none';
+					closeNum = false;
+				}
+			}
+			if(!closeNum){
+				for(var i=0;i<title.length;i++){
+					title[i].setAttribute('data-idx',i);
+					title[i].onclick = function(){
+						var idx = this.getAttribute('data-idx');
+						for(var i=0;i<title.length;i++){
+							title[i].className = '';
+							content[i].style.display = 'none';
+						}
+						this.className = 'active';
+						content[idx].style.display = 'block';
+					}
+				}
+				content[0].style.display = 'block';
+				title[0].className = 'active';
+			}
+			
+
+			
+			//写入goods对象
+			var num = 1;
+			var goods;
+			var totalTotalPrice = 0;
+			var totalprice = 1;
+			$.ajax({
+                    url: '../php/product.php',
+                    // data:{regname:_username},
+                    success: function(data) {
+                        //fx(JSON.parse(data))
+                        //console.log(JSON.parse(data))
+                    var obj = JSON.parse(data);
+                     for(var i = 0;i<=obj.length-1;i++){
+                     	if(obj[i].productid == big_id){
+				            goods = {
+								imgurl : obj[i].img,
+								name : obj[i].proname,
+								price : obj[i].price,
+								qty:1
+							}
+                     	}
+                     }
+                }
+            });
+			
+			//数量加减
+			$('.shuliang').val(1);
+			$('.countMin').on('click',function(){
+				if(num === 1){
+					$('.shuliang').val(1);
+					goods.qty = 1;
+				}else{
+					num--;
+					$('.shuliang').val(num);
+					goods.qty = num;
+				}
+			})
+			$('.countAdd').on('click',function(){
+				if(num === 100){
+					$('.shuliang').val(100);
+					goods.qty = 100;
+				}else{
+					num++;
+					$('.shuliang').val(num);
+					goods.qty = num;
+				}
+			})
+
+			$('.rightBodyUl').children('li').remove();
+			output();
+
+			//购物车飞入效果
+			$('.m-tip').on('click', function(event){
+			    var offset = $('#end').offset(), flyer = $('<img class="u-flyer" src="../image/list/watch1.png"/>');
+			    flyer.fly({
+			        start: {
+			            left: event.clientX,
+			            top: event.clientY-window.scrollY
+			        },
+			        end: {
+			            left: offset.left,
+			            top: offset.top-window.scrollY,
+			            width: 20,
+			            height: 20
+				    }
+				});
+				
+			    goods.qty = parseInt($('.shuliang').val());
+			    
+			    //读取carlist中的cookie
+			    var carlist = getCookie('carlist');
+			    carlist = carlist ? JSON.parse(carlist) : [];
+			    //设置变量判断当前cookie中是否有该商品
+			    var hasGoods = false;
+			    for(var i = 0; i<carlist.length;i++){
+			    	if(carlist[i] .imgurl === goods.imgurl){
+			    		hasGoods = true;
+
+			    		carlist[i].qty += goods.qty;
+			    		break;
+			    	}
+			    }
+				//console.log(carlist[i].qty)
+			    if(!hasGoods){
+			    	carlist.push(goods);
+			    	
+			    	
+			    }
+			    setCookie('carlist',JSON.stringify(carlist));
+			    //console.log(carlist);
+			    $('.rightBodyUl').children('li').remove();
+			    //$('.totalTotalPrice').html('')
+			    output();
+			});
+
+			//.rightBody
+
+
+			function output(){
+				totalTotalPrice = 0;
+				var slidebarSeen = getCookie('carlist');
+				slidebarSeen = slidebarSeen ? JSON.parse(slidebarSeen) : [];
+				//把cookie中的内容写入rightBody
+				
+				
+				$('.slinum').html(slidebarSeen.length);
+			    //以上代码要在读取cookie的时候再写入，才不会变
+			    	
+				for(var j = 0; j<= slidebarSeen.length-1; j++){
+					var li = $('<li/>');
+					var object = slidebarSeen[j];
+					object.price = object.price.replace(',','');
+					console.log(parseInt(object.price))
+					totalprice = parseInt(object.price) * parseInt(object.qty);
+					
+
+					
+					li.html(`<img src="${object.imgurl}" alt="" class="imgProductId">
+						<span>
+							<span class="detailsName">${object.name}</span>
+							<span class="detailsPriceRight">￥${object.price} &times; ${object.qty}</span>
+						</span>
+						<span class="totalPrice">￥${totalprice}</span>`)
+					
+					$('.rightBodyUl').append(li);
+					//console.log(slidebarSeen)
+					
+					
+					totalTotalPrice += totalprice;
+					$('.totalTotalPrice').html(`￥${totalTotalPrice}`)
+				}
+
+				
+			}
+			
+			//点击购物车 去到购物车
+			$('.goTocar').on('click',function(){
+				window.location.href = 'http://localhost/bl_com/html/car.html#';
+			})
+			 
+			
+			//点击logo 回到首页
+			$('.goHome').on('click',function(){
+				window.location.href = 'http://localhost/bl_com/index.html#';
+			})
+			
+		})
+	</script>
+</head>
+<body>
+	<header id="top">
+		<div class="tools">
+			<div class="container">
+				<ul class="toolsLeft">
+					<li>
+						<i class="iconfont icon-fill1fill2"></i>
+						<p><span>百联集团旗下全渠道电商平台</span></p>
+					</li>
+					<li>
+						<a href="#">网站导航</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li><a href="#">百联集团官网</a></li>
+							<li><a href="#">安付宝网</a></li>
+							<li><a href="#">第一医药</a></li>
+							<li><a href="#">OK会员卡专区</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">消息</a>
+					</li>
+				</ul>
+				<ul class="toolsRight">
+					<li>
+						<i class="iconfont icon-denglu"></i>
+						<span>
+							<a href="http://localhost/bl_com/html/log.html#">请登录</a>
+						</span>
+						<span>
+							<a href="http://localhost/bl_com/html/register.html#">注册</a>
+						</span>
+					</li>
+					<li>
+						<a href="#">我的订单</a>
+					</li>
+					<li>
+						<a href="#">我的百联</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li><a href="#">我的订单</a></li>
+							<li><a href="#">我的评价</a></li>
+							<li><a href="#">我的积分</a></li>
+							<li><a href="#">我的收藏</a></li>
+							<li><a href="#">我的优惠券</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">充值缴费</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li>
+								<p>水电煤缴费</p>
+								<ul>
+									<li><a href="#">缴费首页</a></li>
+									<li><a href="#">水费缴费</a></li>
+									<li><a href="#">电费缴费</a></li>
+									<li><a href="#">燃气缴费</a></li>
+								</ul>
+							</li>
+							<li>
+								<p>手机充值</p>
+								<ul>
+									<li><a href="#">手机充值</a></li>
+									<li><a href="#">流量充值</a></li>
+									<li><a href="#">更多充值</a></li>
+								</ul>
+							</li>
+							<li>
+								<p>其他缴费</p>
+								<ul>
+									<li><a href="#">加油卡充值</a></li>
+									<li><a href="#">固话/宽带充值</a></li>
+									<li><a href="#">铁通缴费</a></li>
+									<li><a href="#">有限电视缴费</a></li>
+								</ul>
+							</li>
+							<li>
+								<p>游戏点卡</p>
+								<ul>
+									<li><a href="#">腾讯Q币充值</a></li>
+									<li><a href="#">盛大点券充值</a></li>
+									<li><a href="#">游戏中心</a></li>
+									<li><a href="#">更多游戏</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">客户服务</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li><a href="#">在线客服</a></li>
+							<li><a href="#">帮助中心</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">掌上百联</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<span>
+							<img src="../image/index-erweima.jpg">
+							<p>i百联APP</p>
+							<p>手机购物更方便</p>
+						</span>
+					</li>
+					<li>
+						<a href="http://localhost/bl_com/html/car.html#">购物车</a>
+					</li>
+					<li>
+						<a href="#">关注我们</a>
+						<i class="iconfont icon-iconfontweibowukuang"></i>
+						<i class="iconfont icon-weixin"></i>
+						<ul>
+							<li>
+								<img src="../image/index-weibo.png">
+								<p>点击关注</p>
+								<p>i百联新浪微博</p>
+							</li>
+							<li>
+								<img src="../image/index-weixingongzhonghao.png">
+								<p>扫一扫关注</p>
+								<p>i百联微信公众号</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="header">
+			<div class="container">
+				<div class="headerLogo">
+					<img src="../image/header-logo.png" class="goHome">
+				</div>
+				<div class="searchBox">
+					<div class="searchTop">
+						<input type="text">
+						<button type="submit"><i class="iconfont icon-sousuo_sousuo"></i></button>
+					</div>
+					<div class="searchFoot">
+						<a href="#">特色中国</a>
+						<span>|</span>
+						<a href="#">茶饮料</a>
+						<span>|</span>
+						<a href="#">婴儿奶粉</a>
+						<span>|</span>
+						<a href="#">太阳镜</a>
+						<span>|</span>
+						<a href="#">行车记录仪</a>
+						<span>|</span>
+						<a href="#">华为畅享7plus</a>
+						<span>|</span>
+						<a href="#">鲜花</a>
+						<span>|</span>
+						<a href="#">洗发水</a>
+						<span>|</span>
+						<a href="#">阿迪达斯</a>
+					</div>
+				</div>
+				<div class="anfubao">
+					<a href="#">安付宝OK专区<i class="iconfont icon-xiangyoujiantou"></i></a>
+
+				</div>
+			</div>
+		</div>
+	</header>
+	<div id="banner">
+		<div class="bannerTop">
+			<div class="container">
+				<div class="openNavSearch">
+					<i class="iconfont icon-tab"></i>
+					<span>所有商品分类</span>
+					<div class="navSearch">
+						<ul>
+							<li>
+								<i class="iconfont icon-index-cion"></i>
+								<a href="#">百联进口 全球购</a>
+								<div>
+									<ul>
+										<li>
+											<span><a href="#">进口美容护理</a></span>
+											<div>
+												<a href="#">面霜</a>
+												<span>|</span>
+												<a href="#">套装</a>
+												<span>|</span>
+												<a href="#">面膜</a>
+												<span>|</span>
+												<a href="#">精华</a>
+												<span>|</span>
+												<a href="#">洁面</a>
+												<br>
+												<a href="#">化妆水</a>
+												<span>|</span>
+												<a href="#">身体乳</a>
+												<span>|</span>
+												<a href="#">防晒</a>
+												<span>|</span>
+												<a href="#">彩妆</a>
+												<span>|</span>
+												<a href="#">卸妆</a>
+												<br>
+												<a href="#">洗护发</a>
+												<span>|</span>
+												<a href="#">沐浴</a>
+												<span>|</span>
+												<a href="#">卫生巾</a>
+												<span>|</span>
+												<a href="#">口腔</a>
+												<span>|</span>
+												<a href="#">男士护理</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口休闲零食</a>
+												<span>、</span>
+												<a href="#">进口糖果/巧克力</a>
+											</span>
+											<div>
+												<a href="#">膨化食品</a>
+												<span>|</span>
+												<a href="#">坚果</a>
+												<span>|</span>
+												<a href="#">蜜饯</a>
+												<span>|</span>
+												<a href="#">海味小食</a>
+												<span>|</span>
+												<a href="#">饼干</a>
+												<br>
+												<a href="#">曲奇</a>
+												<span>|</span>
+												<a href="#">威化</a>
+												<span>|</span>
+												<a href="#">糕点</a>
+												<span>|</span>
+												<a href="#">糖果</a>
+												<span>|</span>
+												<a href="#">巧克力</a>
+												<br>
+												<a href="#">果冻/布丁</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口牛奶</a>
+												<span>、</span>
+												<a href="#">进口冲饮</a>
+												<span>、</span>
+												<a href="#">进口咖啡</a>
+												<span>、</span>
+												<a href="#">进口茶</a>
+											</span>
+											<div>
+												<a href="#">牛奶</a>
+												<span>|</span>
+												<a href="#">全脂</a>
+												<span>|</span>
+												<a href="#">低脂</a>
+												<span>|</span>
+												<a href="#">豆奶</a>
+												<span>|</span>
+												<a href="#">奶粉</a>
+												<br>
+												<a href="#">麦片谷物</a>
+												<span>|</span>
+												<a href="#">速溶咖啡</a>
+												<span>|</span>
+												<a href="#">咖啡豆</a>
+												<span>|</span>
+												<a href="#">咖啡粉</a>
+												<br>
+												<a href="#">蜂蜜</a>
+												<span>|</span>
+												<a href="#">柚子茶</a>
+												<span>|</span>
+												<a href="#">红茶</a>
+												<span>|</span>
+												<a href="#">绿茶</a>
+												<span>|</span>
+												<a href="#">果味茶</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口母婴</a>
+											</span>
+											<div>
+												<a href="#">奶粉</a>
+												<span>|</span>
+												<a href="#">辅食</a>
+												<span>|</span>
+												<a href="#">哺育用品</a>
+												<span>|</span>
+												<a href="#">洗护清洁</a>
+												<br>
+												<a href="#">安全座椅</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口粮油</a>
+												<span>、</span>
+												<a href="#">进口速食调味</a>
+											</span>
+											<div>
+												<a href="#">橄榄油</a>
+												<span>|</span>
+												<a href="#">意面</a>
+												<span>|</span>
+												<a href="#">意面酱</a>
+												<span>|</span>
+												<a href="#">大米</a>
+												<span>|</span>
+												<a href="#">方便面</a>
+												<br>
+												<a href="#">罐头</a>
+												<span>|</span>
+												<a href="#">调味酱</a>
+												<span>|</span>
+												<a href="#">调味料</a>
+												<span>|</span>
+												<a href="#">酱油</a>
+												<span>|</span>
+												<a href="#">果酱</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口酒</a>
+												<span>、</span>
+												<a href="#">进口饮料</a>
+												<span>、</span>
+												<a href="#">进口水</a>
+											</span>
+											<div>
+												<a href="#">葡萄酒</a>
+												<span>|</span>
+												<a href="#">啤酒</a>
+												<span>|</span>
+												<a href="#">洋酒</a>
+												<span>|</span>
+												<a href="#">起泡酒</a>
+												<span>|</span>
+												<a href="#">果蔬汁</a>
+												<br>
+												<a href="#">饮用水</a>
+												<span>|</span>
+												<a href="#">碳酸饮料</a>
+												<span>|</span>
+												<a href="#">即饮咖啡</a>
+												<span>|</span>
+												<a href="#">乳饮料</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口3C家电</a>
+											</span>
+											<div>
+												<a href="#">电饭煲</a>
+												<span>|</span>
+												<a href="#">咖啡机</a>
+												<span>|</span>
+												<a href="#">电水壶</a>
+												<span>|</span>
+												<a href="#">空气净化</a>
+												<br>
+												<a href="#">吸尘器</a>
+												<span>|</span>
+												<a href="#">扫地机</a>
+												<span>|</span>
+												<a href="#">剃须刀</a>
+												<span>|</span>
+												<a href="#">电动牙刷</a>
+												<br>
+												<a href="#">电吹风</a>
+											</div>
+										</li>
+									</ul>
+									<div>
+										<img src="../image/index-nav-1-1.jpg">
+										<img src="../image/index-nav-1-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-shengxianshipin"></i>
+								<a href="#">生鲜食品</a>
+								<div>
+									<ul>
+										<li>
+											<span>
+												<a href="#">时令</a>
+												<span>、</span>
+												<a href="#">特色</a>
+											</span>
+											<div>
+												<a href="#">粽子</a>
+												<span>|</span>
+												<a href="#">玉薇蛋糕</a>
+												<span>|</span>
+												<a href="#">乔西牛奶</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">冷鲜肉/冻肉</a>
+											</span>
+											<div>
+												<a href="#">牛肉</a>
+												<span>|</span>
+												<a href="#">猪肉</a>
+												<span>|</span>
+												<a href="#">羊肉</a>
+												<span>|</span>
+												<a href="#">牛排</a>
+												<span>|</span>
+												<a href="#">牛腱</a>
+												<span>|</span>
+												<a href="#">牛尾</a>
+												<br>
+												<a href="#">羊腿</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">海鲜水产</a>
+											</span>
+											<div>
+												<a href="#">鱼类</a>
+												<span>|</span>
+												<a href="#">三文鱼</a>
+												<span>|</span>
+												<a href="#">鲽鱼</a>
+												<span>|</span>
+												<a href="#">鲳鱼</a>
+												<span>|</span>
+												<a href="#">虾类</a>
+												<br>
+												<a href="#">虾仁</a>
+												<span>|</span>
+												<a href="#">蟹类</a>
+												<span>|</span>
+												<a href="#">帝王蟹</a>
+												<span>|</span>
+												<a href="#">海参</a>
+												<span>|</span>
+												<a href="#">贝类</a>
+												<br>
+												<a href="#">生蚝</a>
+												<span>|</span>
+												<a href="#">扇贝</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">禽类</a>
+												<span>、</span>
+												<a href="#">蛋类</a>
+											</span>
+											</span>
+											<div>
+												<a href="#">鸡肉</a>
+												<span>|</span>
+												<a href="#">鸡腿</a>
+												<span>|</span>
+												<a href="#">鸡翅</a>
+												<span>|</span>
+												<a href="#">鸭肉</a>
+												<span>|</span>
+												<a href="#">其他禽类</a>
+												<br>
+												<a href="#">鸡蛋</a>
+												<span>|</span>
+												<a href="#">鸭蛋</a>
+												<span>|</span>
+												<a href="#">咸鸭蛋</a>
+												<span>|</span>
+												<a href="#">松花皮蛋</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜水果</a>
+											</span>
+											<div>
+												<a href="#">进口水果</a>
+												<span>|</span>
+												<a href="#">国产水果</a>
+												<span>|</span>
+												<a href="#">苹果</a>
+												<span>|</span>
+												<a href="#">梨</a>
+												<span>|</span>
+												<a href="#">柑桔橙</a>
+												<br>
+												<a href="#">猕猴桃</a>
+												<span>|</span>
+												<a href="#">牛油果</a>
+												<span>|</span>
+												<a href="#">火龙果</a>
+												<span>|</span>
+												<a href="#">葡萄提子</a>
+												<br>
+												<a href="#">柚子</a>
+												<span>|</span>
+												<a href="#">龙眼</a>
+												<span>|</span>
+												<a href="#">蓝莓</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜蔬菜</a>
+												<span>、</span>
+												<a href="#">蔬菜随心订</a>
+											</span>
+											<div>
+												<a href="#">有机蔬菜</a>
+												<span>|</span>
+												<a href="#">叶菜类</a>
+												<span>|</span>
+												<a href="#">根茎类</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">速冻食品</a>
+											</span>
+											<div>
+												<a href="#">水饺</a>
+												<span>|</span>
+												<a href="#">汤圆</a>
+												<span>|</span>
+												<a href="#">混沌</a>
+												<span>|</span>
+												<a href="#">包子</a>
+												<span>|</span>
+												<a href="#">馒头</a>
+												<span>|</span>
+												<a href="#">面条</a>
+												<br>
+												<a href="#">鱼丸</a>
+												<span>|</span>
+												<a href="#">贡丸</a>
+												<span>|</span>
+												<a href="#">速冻蔬菜</a>
+											</div>
+										</li>
+										
+									</ul>
+									<div>
+										<img src="../image/index-nav-2-1.jpg">
+										<img src="../image/index-nav-2-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-jiushuiyinliao"></i>
+								<a href="#">食品 酒饮 粮油</a>
+								<div>
+									<ul>
+										<li>
+											<span><a href="#">休闲食品</a></span>
+											<div>
+												<a href="#">膨化食品</a>
+												<span>|</span>
+												<a href="#">爆米花</a>
+												<span>|</span>
+												<a href="#">坚果</a>
+												<span>|</span>
+												<a href="#">蜜饯果干</a>
+												<br>
+												<a href="#">肉脯肉干</a>
+												<span>|</span>
+												<a href="#">肉松</a>
+												<span>|</span>
+												<a href="#">豆干</a>
+												<span>|</span>
+												<a href="#">鸭脖</a>
+												<span>|</span>
+												<a href="#">海味零食</a>
+												<br>
+												<a href="#">海苔</a>
+												<span>|</span>
+												<a href="#">糖果</a>
+												<span>|</span>
+												<a href="#">巧克力</a>
+												<span>|</span>
+												<a href="#">果冻布丁</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">饼干糕点</a>
+											</span>
+											<div>
+												<a href="#">饼干</a>
+												<span>|</span>
+												<a href="#">曲奇</a>
+												<span>|</span>
+												<a href="#">威化</a>
+												<span>|</span>
+												<a href="#">苏打饼干</a>
+												<span>|</span>
+												<a href="#">动物饼干</a>
+												<br>
+												<a href="#">杂粮饼干</a>
+												<span>|</span>
+												<a href="#">中式糕点</a>
+												<span>|</span>
+												<a href="#">沙琪玛</a>
+												<span>|</span>
+												<a href="#">凤梨酥</a>
+												<br>
+												<a href="#">肉松饼</a>
+												<span>|</span>
+												<a href="#">西式糕点</a>
+												<span>|</span>
+												<a href="#">面包</a>
+												<span>|</span>
+												<a href="#">无糖食品</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口牛奶</a>
+												<span>、</span>
+												<a href="#">进口冲饮</a>
+												<span>、</span>
+												<a href="#">进口咖啡</a>
+												<span>、</span>
+												<a href="#">进口茶</a>
+											</span>
+											<div>
+												<a href="#">牛奶</a>
+												<span>|</span>
+												<a href="#">全脂</a>
+												<span>|</span>
+												<a href="#">低脂</a>
+												<span>|</span>
+												<a href="#">豆奶</a>
+												<span>|</span>
+												<a href="#">奶粉</a>
+												<br>
+												<a href="#">麦片谷物</a>
+												<span>|</span>
+												<a href="#">速溶咖啡</a>
+												<span>|</span>
+												<a href="#">咖啡豆</a>
+												<span>|</span>
+												<a href="#">咖啡粉</a>
+												<br>
+												<a href="#">蜂蜜</a>
+												<span>|</span>
+												<a href="#">柚子茶</a>
+												<span>|</span>
+												<a href="#">红茶</a>
+												<span>|</span>
+												<a href="#">绿茶</a>
+												<span>|</span>
+												<a href="#">果味茶</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口母婴</a>
+											</span>
+											<div>
+												<a href="#">奶粉</a>
+												<span>|</span>
+												<a href="#">辅食</a>
+												<span>|</span>
+												<a href="#">哺育用品</a>
+												<span>|</span>
+												<a href="#">洗护清洁</a>
+												<br>
+												<a href="#">安全座椅</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口粮油</a>
+												<span>、</span>
+												<a href="#">进口速食调味</a>
+											</span>
+											<div>
+												<a href="#">橄榄油</a>
+												<span>|</span>
+												<a href="#">意面</a>
+												<span>|</span>
+												<a href="#">意面酱</a>
+												<span>|</span>
+												<a href="#">大米</a>
+												<span>|</span>
+												<a href="#">方便面</a>
+												<br>
+												<a href="#">罐头</a>
+												<span>|</span>
+												<a href="#">调味酱</a>
+												<span>|</span>
+												<a href="#">调味料</a>
+												<span>|</span>
+												<a href="#">酱油</a>
+												<span>|</span>
+												<a href="#">果酱</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口酒</a>
+												<span>、</span>
+												<a href="#">进口饮料</a>
+												<span>、</span>
+												<a href="#">进口水</a>
+											</span>
+											<div>
+												<a href="#">葡萄酒</a>
+												<span>|</span>
+												<a href="#">啤酒</a>
+												<span>|</span>
+												<a href="#">洋酒</a>
+												<span>|</span>
+												<a href="#">起泡酒</a>
+												<span>|</span>
+												<a href="#">果蔬汁</a>
+												<br>
+												<a href="#">饮用水</a>
+												<span>|</span>
+												<a href="#">碳酸饮料</a>
+												<span>|</span>
+												<a href="#">即饮咖啡</a>
+												<span>|</span>
+												<a href="#">乳饮料</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口3C家电</a>
+											</span>
+											<div>
+												<a href="#">电饭煲</a>
+												<span>|</span>
+												<a href="#">咖啡机</a>
+												<span>|</span>
+												<a href="#">电水壶</a>
+												<span>|</span>
+												<a href="#">空气净化</a>
+												<br>
+												<a href="#">吸尘器</a>
+												<span>|</span>
+												<a href="#">扫地机</a>
+												<span>|</span>
+												<a href="#">剃须刀</a>
+												<span>|</span>
+												<a href="#">电动牙刷</a>
+												<br>
+												<a href="#">电吹风</a>
+											</div>
+										</li>
+									</ul>
+									<div>
+										<img src="../image/index-nav-3-1.jpg">
+										<img src="../image/index-nav-3-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-meironghuli"></i>
+								<a href="#">美容护理</a>
+								<div>
+									<ul>
+										<li>
+											<span><a href="#">面部护肤</a></span>
+											<div>
+												<a href="#">乳液面霜</a>
+												<span>|</span>
+												<a href="#">护肤套装</a>
+												<span>|</span>
+												<a href="#">洁面</a>
+												<span>|</span>
+												<a href="#">面膜</a>
+												<span>|</span>
+												<a href="#">精华</a>
+												<!-- <br> -->
+												<a href="#">爽肤水</a>
+												<span>|</span>
+												<a href="#">面部喷雾</a>
+												<span>|</span>
+												<a href="#">眼霜</a>
+												<span>|</span>
+												<a href="#">润唇膏</a>
+												<span>|</span>
+												<a href="#">卸妆</a>
+												<!-- <br> -->
+												<a href="#">防晒</a>
+												<span>|</span>
+												<a href="#">T区护理</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">美发护肤</a>
+											</span>
+											<div>
+												<a href="#">洗发水</a>
+												<span>|</span>
+												<a href="#">进口洗发水</a>
+												<span>|</span>
+												<a href="#">护发素</a>
+												<span>|</span>
+												<a href="#">发膜</a>
+												<br>
+												<a href="#">洗护套装</a>
+												<span>|</span>
+												<a href="#">头发造型</a>
+												<span>|</span>
+												<a href="#">弹力素</a>
+												<span>|</span>
+												<a href="#">发泥发蜡</a>
+												<br>
+												<a href="#">染发</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">女性护理</a>
+											</span>
+											<div>
+												<a href="#">卫生巾</a>
+												<span>|</span>
+												<a href="#">日用</a>
+												<span>|</span>
+												<a href="#">夜用</a>
+												<span>|</span>
+												<a href="#">安心裤</a>
+												<span>|</span>
+												<a href="#">组合套装</a>
+												<br>
+												<a href="#">卫生护垫</a>
+												<span>|</span>
+												<a href="#">卫生棉条</a>
+												<span>|</span>
+												<a href="#">女性湿巾</a>
+												<br>
+												<a href="#">私处洗液</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">男士护肤</a>
+											</span>
+											<div>
+												<a href="#">洁面</a>
+												<span>|</span>
+												<a href="#">爽肤水</a>
+												<span>|</span>
+												<a href="#">乳液面霜</a>
+												<span>|</span>
+												<a href="#">精华</a>
+												<span>|</span>
+												<a href="#">润唇膏</a>
+												<br>
+												<a href="#">洗发水</a>
+												<span>|</span>
+												<a href="#">沐浴露</a>
+												<span>|</span>
+												<a href="#">剃须刀</a>
+												<span>|</span>
+												<a href="#">剃须泡沫</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">身体护理</a>
+												<span>、</span>
+												<a href="#">沐浴清洁</a>
+											</span>
+											<div>
+												<a href="#">身体乳</a>
+												<span>|</span>
+												<a href="#">洗手液</a>
+												<span>|</span>
+												<a href="#">香皂</a>
+												<span>|</span>
+												<a href="#">泡澡浴盐</a>
+												<br>
+												<a href="#">沐浴露</a>
+												<span>|</span>
+												<a href="#">护手霜</a>
+												<span>|</span>
+												<a href="#">足部护理</a>
+												<span>|</span>
+												<a href="#">身体磨砂</a>
+												<br>
+												<a href="#">美体塑身</a>
+												<span>|</span>
+												<a href="#">精油芳疗</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">彩妆</a>
+											</span>
+											<div>
+												<a href="#">BB霜</a>
+												<span>|</span>
+												<a href="#">隔离</a>
+												<span>|</span>
+												<a href="#">粉底</a>
+												<span>|</span>
+												<a href="#">粉饼</a>
+												<span>|</span>
+												<a href="#">遮瑕</a>
+												<span>|</span>
+												<a href="#">散粉</a>
+												<br>
+												<a href="#">口红</a>
+												<span>|</span>
+												<a href="#">睫毛膏</a>
+												<span>|</span>
+												<a href="#">眼影</a>
+												<span>|</span>
+												<a href="#">眼线</a>
+												<span>|</span>
+												<a href="#">眉笔</a>
+												<br>
+												<a href="#">香水</a>
+												<span>|</span>
+												<a href="#">指甲油</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">美容工具</a>
+												<span>、</span>
+												<a href="#">洗护用具</a>
+											</span>
+											<div>
+												<a href="#">化妆棉</a>
+												<span>|</span>
+												<a href="#">美发梳</a>
+												<span>|</span>
+												<a href="#">美甲工具</a>
+												<span>|</span>
+												<a href="#">眼眉工具</a>
+												<br>
+												<a href="#">面部工具</a>
+												<span>|</span>
+												<a href="#">浴球/浴花</a>
+											</div>
+										</li>
+										
+									</ul>
+									<div>
+										<img src="../image/index-nav-4-1.jpg">
+										<img src="../image/index-nav-4-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-muyingwanju"></i>
+								<a href="#">母婴玩具</a>
+								<div>
+									<ul>
+										<li>
+											<span>
+												<a href="#">奶粉</a>
+												<span>、</span>
+												<a href="#">辅食</a>
+											</span>
+											<div>
+												<a href="#">奶粉</a>
+												<span>|</span>
+												<a href="#">1段</a>
+												<span>|</span>
+												<a href="#">2段</a>
+												<span>|</span>
+												<a href="#">3段</a>
+												<span>|</span>
+												<a href="#">4段</a>
+												<span>|</span>
+												<a href="#">孕妈奶粉</a>
+												<br>
+												<a href="#">特殊配方</a>
+												<span>|</span>
+												<a href="#">有机奶粉</a>
+												<span>|</span>
+												<a href="#">面食</a>
+												<span>|</span>
+												<a href="#">米粉粥</a>
+												<br>
+												<a href="#">果蔬肉泥</a>
+												<span>|</span>
+												<a href="#">营养品</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">尿裤/湿巾</a>
+											</span>
+											<div>
+												<a href="#">纸尿裤</a>
+												<span>|</span>
+												<a href="#">NB</a>
+												<span>|</span>
+												<a href="#">S</a>
+												<span>|</span>
+												<a href="#">M</a>
+												<span>|</span>
+												<a href="#">L</a>
+												<span>|</span>
+												<a href="#">XL</a>
+												<span>|</span>
+												<a href="#">拉拉裤</a>
+												<br>
+												<a href="#">婴儿湿巾</a>
+												<span>|</span>
+												<a href="#">纸尿片</a>
+												<span>|</span>
+												<a href="#">成人尿裤</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">宝宝洗护清洁</a>
+											</span>
+											<div>
+												<a href="#">洗发护发</a>
+												<span>|</span>
+												<a href="#">沐浴露</a>
+												<span>|</span>
+												<a href="#">婴儿护肤</a>
+												<span>|</span>
+												<a href="#">牙膏/牙刷</a>
+												<br>
+												<a href="#">驱蚊/防腓</a>
+												<span>|</span>
+												<a href="#">洗衣液</a>
+												<span>|</span>
+												<a href="#">洗衣皂</a>
+												<span>|</span>
+												<a href="#">奶瓶清洁</a>
+												<br>
+												<a href="#">洗手液</a>
+												<span>|</span>
+												<a href="#">坐便器</a>
+												<span>|</span>
+												<a href="#">日常护理</a>
+												<span>|</span>
+												<a href="#">理发器</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">玩具</a>
+											</span>
+											<div>
+												<a href="#">早教益智</a>
+												<span>|</span>
+												<a href="#">彩泥手工</a>
+												<span>|</span>
+												<a href="#">婴幼儿玩具</a>
+												<br>
+												<a href="#">电动玩具</a>
+												<span>|</span>
+												<a href="#">积木拼图</a>
+												<span>|</span>
+												<a href="#">毛绒</a>
+												<span>|</span>
+												<a href="#">娃娃</a>
+												<span>|</span>
+												<a href="#">动漫</a>
+												<br>
+												<a href="#">休闲玩具</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">婴童车床</a>
+												<span>、</span>
+												<a href="#">婴幼家纺</a>
+											</span>
+											<div>
+												<a href="#">安全座椅</a>
+												<span>|</span>
+												<a href="#">婴儿推车</a>
+												<span>|</span>
+												<a href="#">婴儿背带</a>
+												<span>|</span>
+												<a href="#">婴儿床</a>
+												<br>
+												<a href="#">餐椅</a>
+												<span>|</span>
+												<a href="#">自行车</a>
+												<span>|</span>
+												<a href="#">儿童枕</a>
+												<span>|</span>
+												<a href="#">抱被/抱毯</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">哺育喂养用品</a>
+											</span>
+											<div>
+												<a href="#">奶瓶/奶嘴</a>
+												<span>|</span>
+												<a href="#">吸奶器</a>
+												<span>|</span>
+												<a href="#">奶瓶消毒</a>
+												<span>|</span>
+												<a href="#">暖奶器</a>
+												<br>
+												<a href="#">储奶袋/瓶</a>
+												<span>|</span>
+												<a href="#">安抚奶嘴</a>
+												<span>|</span>
+												<a href="#">牙胶咬咬乐</a>
+												<br>
+												<a href="#">BB煲</a>
+												<span>|</span>
+												<a href="#">奶瓶刷/奶嘴刷</a>
+												<span>|</span>
+												<a href="#">儿童餐具</a>
+												<br>
+												<a href="#">吸管杯</a>
+												<span>|</span>
+												<a href="#">调奶器</a>
+											</div>
+										</li>
+										
+									</ul>
+									<div>
+										<img src="../image/index-nav-5-1.jpg">
+										<img src="../image/index-nav-5-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-weibiaoti2fuzhi09"></i>
+								<a href="#">餐厨用具 家居家装</a>
+								<div>
+									<ul>
+										<li>
+											<span>
+												<a href="#">时令</a>
+												<span>、</span>
+												<a href="#">特色</a>
+											</span>
+											<div>
+												<a href="#">粽子</a>
+												<span>|</span>
+												<a href="#">玉薇蛋糕</a>
+												<span>|</span>
+												<a href="#">乔西牛奶</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">冷鲜肉/冻肉</a>
+											</span>
+											<div>
+												<a href="#">牛肉</a>
+												<span>|</span>
+												<a href="#">猪肉</a>
+												<span>|</span>
+												<a href="#">羊肉</a>
+												<span>|</span>
+												<a href="#">牛排</a>
+												<span>|</span>
+												<a href="#">牛腱</a>
+												<span>|</span>
+												<a href="#">牛尾</a>
+												<br>
+												<a href="#">羊腿</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">海鲜水产</a>
+											</span>
+											<div>
+												<a href="#">鱼类</a>
+												<span>|</span>
+												<a href="#">三文鱼</a>
+												<span>|</span>
+												<a href="#">鲽鱼</a>
+												<span>|</span>
+												<a href="#">鲳鱼</a>
+												<span>|</span>
+												<a href="#">虾类</a>
+												<br>
+												<a href="#">虾仁</a>
+												<span>|</span>
+												<a href="#">蟹类</a>
+												<span>|</span>
+												<a href="#">帝王蟹</a>
+												<span>|</span>
+												<a href="#">海参</a>
+												<span>|</span>
+												<a href="#">贝类</a>
+												<br>
+												<a href="#">生蚝</a>
+												<span>|</span>
+												<a href="#">扇贝</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">禽类</a>
+												<span>、</span>
+												<a href="#">蛋类</a>
+											</span>
+											</span>
+											<div>
+												<a href="#">鸡肉</a>
+												<span>|</span>
+												<a href="#">鸡腿</a>
+												<span>|</span>
+												<a href="#">鸡翅</a>
+												<span>|</span>
+												<a href="#">鸭肉</a>
+												<span>|</span>
+												<a href="#">其他禽类</a>
+												<br>
+												<a href="#">鸡蛋</a>
+												<span>|</span>
+												<a href="#">鸭蛋</a>
+												<span>|</span>
+												<a href="#">咸鸭蛋</a>
+												<span>|</span>
+												<a href="#">松花皮蛋</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜水果</a>
+											</span>
+											<div>
+												<a href="#">进口水果</a>
+												<span>|</span>
+												<a href="#">国产水果</a>
+												<span>|</span>
+												<a href="#">苹果</a>
+												<span>|</span>
+												<a href="#">梨</a>
+												<span>|</span>
+												<a href="#">柑桔橙</a>
+												<br>
+												<a href="#">猕猴桃</a>
+												<span>|</span>
+												<a href="#">牛油果</a>
+												<span>|</span>
+												<a href="#">火龙果</a>
+												<span>|</span>
+												<a href="#">葡萄提子</a>
+												<br>
+												<a href="#">柚子</a>
+												<span>|</span>
+												<a href="#">龙眼</a>
+												<span>|</span>
+												<a href="#">蓝莓</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜蔬菜</a>
+												<span>、</span>
+												<a href="#">蔬菜随心订</a>
+											</span>
+											<div>
+												<a href="#">有机蔬菜</a>
+												<span>|</span>
+												<a href="#">叶菜类</a>
+												<span>|</span>
+												<a href="#">根茎类</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">速冻食品</a>
+											</span>
+											<div>
+												<a href="#">水饺</a>
+												<span>|</span>
+												<a href="#">汤圆</a>
+												<span>|</span>
+												<a href="#">混沌</a>
+												<span>|</span>
+												<a href="#">包子</a>
+												<span>|</span>
+												<a href="#">馒头</a>
+												<span>|</span>
+												<a href="#">面条</a>
+												<br>
+												<a href="#">鱼丸</a>
+												<span>|</span>
+												<a href="#">贡丸</a>
+												<span>|</span>
+												<a href="#">速冻蔬菜</a>
+											</div>
+										</li>
+										
+									</ul>
+									<div>
+										<img src="../image/index-nav-6-1.jpg">
+										<img src="../image/index-nav-6-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-zhipin"></i>
+								<a href="#">家清 纸品 一次性</a>
+								<div>
+									<ul>
+										<li>
+											<span>
+												<a href="#">时令</a>
+												<span>、</span>
+												<a href="#">特色</a>
+											</span>
+											<div>
+												<a href="#">粽子</a>
+												<span>|</span>
+												<a href="#">玉薇蛋糕</a>
+												<span>|</span>
+												<a href="#">乔西牛奶</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">冷鲜肉/冻肉</a>
+											</span>
+											<div>
+												<a href="#">牛肉</a>
+												<span>|</span>
+												<a href="#">猪肉</a>
+												<span>|</span>
+												<a href="#">羊肉</a>
+												<span>|</span>
+												<a href="#">牛排</a>
+												<span>|</span>
+												<a href="#">牛腱</a>
+												<span>|</span>
+												<a href="#">牛尾</a>
+												<br>
+												<a href="#">羊腿</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">海鲜水产</a>
+											</span>
+											<div>
+												<a href="#">鱼类</a>
+												<span>|</span>
+												<a href="#">三文鱼</a>
+												<span>|</span>
+												<a href="#">鲽鱼</a>
+												<span>|</span>
+												<a href="#">鲳鱼</a>
+												<span>|</span>
+												<a href="#">虾类</a>
+												<br>
+												<a href="#">虾仁</a>
+												<span>|</span>
+												<a href="#">蟹类</a>
+												<span>|</span>
+												<a href="#">帝王蟹</a>
+												<span>|</span>
+												<a href="#">海参</a>
+												<span>|</span>
+												<a href="#">贝类</a>
+												<br>
+												<a href="#">生蚝</a>
+												<span>|</span>
+												<a href="#">扇贝</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">禽类</a>
+												<span>、</span>
+												<a href="#">蛋类</a>
+											</span>
+											</span>
+											<div>
+												<a href="#">鸡肉</a>
+												<span>|</span>
+												<a href="#">鸡腿</a>
+												<span>|</span>
+												<a href="#">鸡翅</a>
+												<span>|</span>
+												<a href="#">鸭肉</a>
+												<span>|</span>
+												<a href="#">其他禽类</a>
+												<br>
+												<a href="#">鸡蛋</a>
+												<span>|</span>
+												<a href="#">鸭蛋</a>
+												<span>|</span>
+												<a href="#">咸鸭蛋</a>
+												<span>|</span>
+												<a href="#">松花皮蛋</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜水果</a>
+											</span>
+											<div>
+												<a href="#">进口水果</a>
+												<span>|</span>
+												<a href="#">国产水果</a>
+												<span>|</span>
+												<a href="#">苹果</a>
+												<span>|</span>
+												<a href="#">梨</a>
+												<span>|</span>
+												<a href="#">柑桔橙</a>
+												<br>
+												<a href="#">猕猴桃</a>
+												<span>|</span>
+												<a href="#">牛油果</a>
+												<span>|</span>
+												<a href="#">火龙果</a>
+												<span>|</span>
+												<a href="#">葡萄提子</a>
+												<br>
+												<a href="#">柚子</a>
+												<span>|</span>
+												<a href="#">龙眼</a>
+												<span>|</span>
+												<a href="#">蓝莓</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜蔬菜</a>
+												<span>、</span>
+												<a href="#">蔬菜随心订</a>
+											</span>
+											<div>
+												<a href="#">有机蔬菜</a>
+												<span>|</span>
+												<a href="#">叶菜类</a>
+												<span>|</span>
+												<a href="#">根茎类</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">速冻食品</a>
+											</span>
+											<div>
+												<a href="#">水饺</a>
+												<span>|</span>
+												<a href="#">汤圆</a>
+												<span>|</span>
+												<a href="#">混沌</a>
+												<span>|</span>
+												<a href="#">包子</a>
+												<span>|</span>
+												<a href="#">馒头</a>
+												<span>|</span>
+												<a href="#">面条</a>
+												<br>
+												<a href="#">鱼丸</a>
+												<span>|</span>
+												<a href="#">贡丸</a>
+												<span>|</span>
+												<a href="#">速冻蔬菜</a>
+											</div>
+										</li>
+										
+									</ul>
+									<div>
+										<img src="../image/index-nav-7-1.jpg">
+										<img src="../image/index-nav-7-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-huanfu1"></i>
+								<a href="#">女装 男装</a>
+								<div>
+									<ul>
+										<li>
+											<span><a href="#">进口美容护理</a></span>
+											<div>
+												<a href="#">面霜</a>
+												<span>|</span>
+												<a href="#">套装</a>
+												<span>|</span>
+												<a href="#">面膜</a>
+												<span>|</span>
+												<a href="#">精华</a>
+												<span>|</span>
+												<a href="#">洁面</a>
+												<br>
+												<a href="#">化妆水</a>
+												<span>|</span>
+												<a href="#">身体乳</a>
+												<span>|</span>
+												<a href="#">防晒</a>
+												<span>|</span>
+												<a href="#">彩妆</a>
+												<span>|</span>
+												<a href="#">卸妆</a>
+												<br>
+												<a href="#">洗护发</a>
+												<span>|</span>
+												<a href="#">沐浴</a>
+												<span>|</span>
+												<a href="#">卫生巾</a>
+												<span>|</span>
+												<a href="#">口腔</a>
+												<span>|</span>
+												<a href="#">男士护理</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口休闲零食</a>
+												<span>、</span>
+												<a href="#">进口糖果/巧克力</a>
+											</span>
+											<div>
+												<a href="#">膨化食品</a>
+												<span>|</span>
+												<a href="#">坚果</a>
+												<span>|</span>
+												<a href="#">蜜饯</a>
+												<span>|</span>
+												<a href="#">海味小食</a>
+												<span>|</span>
+												<a href="#">饼干</a>
+												<br>
+												<a href="#">曲奇</a>
+												<span>|</span>
+												<a href="#">威化</a>
+												<span>|</span>
+												<a href="#">糕点</a>
+												<span>|</span>
+												<a href="#">糖果</a>
+												<span>|</span>
+												<a href="#">巧克力</a>
+												<br>
+												<a href="#">果冻/布丁</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口牛奶</a>
+												<span>、</span>
+												<a href="#">进口冲饮</a>
+												<span>、</span>
+												<a href="#">进口咖啡</a>
+												<span>、</span>
+												<a href="#">进口茶</a>
+											</span>
+											<div>
+												<a href="#">牛奶</a>
+												<span>|</span>
+												<a href="#">全脂</a>
+												<span>|</span>
+												<a href="#">低脂</a>
+												<span>|</span>
+												<a href="#">豆奶</a>
+												<span>|</span>
+												<a href="#">奶粉</a>
+												<br>
+												<a href="#">麦片谷物</a>
+												<span>|</span>
+												<a href="#">速溶咖啡</a>
+												<span>|</span>
+												<a href="#">咖啡豆</a>
+												<span>|</span>
+												<a href="#">咖啡粉</a>
+												<br>
+												<a href="#">蜂蜜</a>
+												<span>|</span>
+												<a href="#">柚子茶</a>
+												<span>|</span>
+												<a href="#">红茶</a>
+												<span>|</span>
+												<a href="#">绿茶</a>
+												<span>|</span>
+												<a href="#">果味茶</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口母婴</a>
+											</span>
+											<div>
+												<a href="#">奶粉</a>
+												<span>|</span>
+												<a href="#">辅食</a>
+												<span>|</span>
+												<a href="#">哺育用品</a>
+												<span>|</span>
+												<a href="#">洗护清洁</a>
+												<br>
+												<a href="#">安全座椅</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口粮油</a>
+												<span>、</span>
+												<a href="#">进口速食调味</a>
+											</span>
+											<div>
+												<a href="#">橄榄油</a>
+												<span>|</span>
+												<a href="#">意面</a>
+												<span>|</span>
+												<a href="#">意面酱</a>
+												<span>|</span>
+												<a href="#">大米</a>
+												<span>|</span>
+												<a href="#">方便面</a>
+												<br>
+												<a href="#">罐头</a>
+												<span>|</span>
+												<a href="#">调味酱</a>
+												<span>|</span>
+												<a href="#">调味料</a>
+												<span>|</span>
+												<a href="#">酱油</a>
+												<span>|</span>
+												<a href="#">果酱</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口酒</a>
+												<span>、</span>
+												<a href="#">进口饮料</a>
+												<span>、</span>
+												<a href="#">进口水</a>
+											</span>
+											<div>
+												<a href="#">葡萄酒</a>
+												<span>|</span>
+												<a href="#">啤酒</a>
+												<span>|</span>
+												<a href="#">洋酒</a>
+												<span>|</span>
+												<a href="#">起泡酒</a>
+												<span>|</span>
+												<a href="#">果蔬汁</a>
+												<br>
+												<a href="#">饮用水</a>
+												<span>|</span>
+												<a href="#">碳酸饮料</a>
+												<span>|</span>
+												<a href="#">即饮咖啡</a>
+												<span>|</span>
+												<a href="#">乳饮料</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口3C家电</a>
+											</span>
+											<div>
+												<a href="#">电饭煲</a>
+												<span>|</span>
+												<a href="#">咖啡机</a>
+												<span>|</span>
+												<a href="#">电水壶</a>
+												<span>|</span>
+												<a href="#">空气净化</a>
+												<br>
+												<a href="#">吸尘器</a>
+												<span>|</span>
+												<a href="#">扫地机</a>
+												<span>|</span>
+												<a href="#">剃须刀</a>
+												<span>|</span>
+												<a href="#">电动牙刷</a>
+												<br>
+												<a href="#">电吹风</a>
+											</div>
+										</li>
+									</ul>
+									<div>
+										<img src="../image/index-nav-8-1.jpg">
+										<img src="../image/index-nav-8-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-xiangbaofuxue"></i>
+								<a href="#">鞋靴箱包 珠宝饰品</a>
+								<div>
+									<ul>
+										<li>
+											<span>
+												<a href="#">时令</a>
+												<span>、</span>
+												<a href="#">特色</a>
+											</span>
+											<div>
+												<a href="#">粽子</a>
+												<span>|</span>
+												<a href="#">玉薇蛋糕</a>
+												<span>|</span>
+												<a href="#">乔西牛奶</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">冷鲜肉/冻肉</a>
+											</span>
+											<div>
+												<a href="#">牛肉</a>
+												<span>|</span>
+												<a href="#">猪肉</a>
+												<span>|</span>
+												<a href="#">羊肉</a>
+												<span>|</span>
+												<a href="#">牛排</a>
+												<span>|</span>
+												<a href="#">牛腱</a>
+												<span>|</span>
+												<a href="#">牛尾</a>
+												<br>
+												<a href="#">羊腿</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">海鲜水产</a>
+											</span>
+											<div>
+												<a href="#">鱼类</a>
+												<span>|</span>
+												<a href="#">三文鱼</a>
+												<span>|</span>
+												<a href="#">鲽鱼</a>
+												<span>|</span>
+												<a href="#">鲳鱼</a>
+												<span>|</span>
+												<a href="#">虾类</a>
+												<br>
+												<a href="#">虾仁</a>
+												<span>|</span>
+												<a href="#">蟹类</a>
+												<span>|</span>
+												<a href="#">帝王蟹</a>
+												<span>|</span>
+												<a href="#">海参</a>
+												<span>|</span>
+												<a href="#">贝类</a>
+												<br>
+												<a href="#">生蚝</a>
+												<span>|</span>
+												<a href="#">扇贝</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">禽类</a>
+												<span>、</span>
+												<a href="#">蛋类</a>
+											</span>
+											</span>
+											<div>
+												<a href="#">鸡肉</a>
+												<span>|</span>
+												<a href="#">鸡腿</a>
+												<span>|</span>
+												<a href="#">鸡翅</a>
+												<span>|</span>
+												<a href="#">鸭肉</a>
+												<span>|</span>
+												<a href="#">其他禽类</a>
+												<br>
+												<a href="#">鸡蛋</a>
+												<span>|</span>
+												<a href="#">鸭蛋</a>
+												<span>|</span>
+												<a href="#">咸鸭蛋</a>
+												<span>|</span>
+												<a href="#">松花皮蛋</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜水果</a>
+											</span>
+											<div>
+												<a href="#">进口水果</a>
+												<span>|</span>
+												<a href="#">国产水果</a>
+												<span>|</span>
+												<a href="#">苹果</a>
+												<span>|</span>
+												<a href="#">梨</a>
+												<span>|</span>
+												<a href="#">柑桔橙</a>
+												<br>
+												<a href="#">猕猴桃</a>
+												<span>|</span>
+												<a href="#">牛油果</a>
+												<span>|</span>
+												<a href="#">火龙果</a>
+												<span>|</span>
+												<a href="#">葡萄提子</a>
+												<br>
+												<a href="#">柚子</a>
+												<span>|</span>
+												<a href="#">龙眼</a>
+												<span>|</span>
+												<a href="#">蓝莓</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜蔬菜</a>
+												<span>、</span>
+												<a href="#">蔬菜随心订</a>
+											</span>
+											<div>
+												<a href="#">有机蔬菜</a>
+												<span>|</span>
+												<a href="#">叶菜类</a>
+												<span>|</span>
+												<a href="#">根茎类</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">速冻食品</a>
+											</span>
+											<div>
+												<a href="#">水饺</a>
+												<span>|</span>
+												<a href="#">汤圆</a>
+												<span>|</span>
+												<a href="#">混沌</a>
+												<span>|</span>
+												<a href="#">包子</a>
+												<span>|</span>
+												<a href="#">馒头</a>
+												<span>|</span>
+												<a href="#">面条</a>
+												<br>
+												<a href="#">鱼丸</a>
+												<span>|</span>
+												<a href="#">贡丸</a>
+												<span>|</span>
+												<a href="#">速冻蔬菜</a>
+											</div>
+										</li>
+										
+									</ul>
+									<div>
+										<img src="../image/index-nav-9-1.jpg">
+										<img src="../image/index-nav-9-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-shoujishuma"></i>
+								<a href="#">手机数码 电脑办公</a>
+								<div>
+									<ul>
+										<li>
+											<span><a href="#">休闲食品</a></span>
+											<div>
+												<a href="#">膨化食品</a>
+												<span>|</span>
+												<a href="#">爆米花</a>
+												<span>|</span>
+												<a href="#">坚果</a>
+												<span>|</span>
+												<a href="#">蜜饯果干</a>
+												<br>
+												<a href="#">肉脯肉干</a>
+												<span>|</span>
+												<a href="#">肉松</a>
+												<span>|</span>
+												<a href="#">豆干</a>
+												<span>|</span>
+												<a href="#">鸭脖</a>
+												<span>|</span>
+												<a href="#">海味零食</a>
+												<br>
+												<a href="#">海苔</a>
+												<span>|</span>
+												<a href="#">糖果</a>
+												<span>|</span>
+												<a href="#">巧克力</a>
+												<span>|</span>
+												<a href="#">果冻布丁</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">饼干糕点</a>
+											</span>
+											<div>
+												<a href="#">饼干</a>
+												<span>|</span>
+												<a href="#">曲奇</a>
+												<span>|</span>
+												<a href="#">威化</a>
+												<span>|</span>
+												<a href="#">苏打饼干</a>
+												<span>|</span>
+												<a href="#">动物饼干</a>
+												<br>
+												<a href="#">杂粮饼干</a>
+												<span>|</span>
+												<a href="#">中式糕点</a>
+												<span>|</span>
+												<a href="#">沙琪玛</a>
+												<span>|</span>
+												<a href="#">凤梨酥</a>
+												<br>
+												<a href="#">肉松饼</a>
+												<span>|</span>
+												<a href="#">西式糕点</a>
+												<span>|</span>
+												<a href="#">面包</a>
+												<span>|</span>
+												<a href="#">无糖食品</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口牛奶</a>
+												<span>、</span>
+												<a href="#">进口冲饮</a>
+												<span>、</span>
+												<a href="#">进口咖啡</a>
+												<span>、</span>
+												<a href="#">进口茶</a>
+											</span>
+											<div>
+												<a href="#">牛奶</a>
+												<span>|</span>
+												<a href="#">全脂</a>
+												<span>|</span>
+												<a href="#">低脂</a>
+												<span>|</span>
+												<a href="#">豆奶</a>
+												<span>|</span>
+												<a href="#">奶粉</a>
+												<br>
+												<a href="#">麦片谷物</a>
+												<span>|</span>
+												<a href="#">速溶咖啡</a>
+												<span>|</span>
+												<a href="#">咖啡豆</a>
+												<span>|</span>
+												<a href="#">咖啡粉</a>
+												<br>
+												<a href="#">蜂蜜</a>
+												<span>|</span>
+												<a href="#">柚子茶</a>
+												<span>|</span>
+												<a href="#">红茶</a>
+												<span>|</span>
+												<a href="#">绿茶</a>
+												<span>|</span>
+												<a href="#">果味茶</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口母婴</a>
+											</span>
+											<div>
+												<a href="#">奶粉</a>
+												<span>|</span>
+												<a href="#">辅食</a>
+												<span>|</span>
+												<a href="#">哺育用品</a>
+												<span>|</span>
+												<a href="#">洗护清洁</a>
+												<br>
+												<a href="#">安全座椅</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口粮油</a>
+												<span>、</span>
+												<a href="#">进口速食调味</a>
+											</span>
+											<div>
+												<a href="#">橄榄油</a>
+												<span>|</span>
+												<a href="#">意面</a>
+												<span>|</span>
+												<a href="#">意面酱</a>
+												<span>|</span>
+												<a href="#">大米</a>
+												<span>|</span>
+												<a href="#">方便面</a>
+												<br>
+												<a href="#">罐头</a>
+												<span>|</span>
+												<a href="#">调味酱</a>
+												<span>|</span>
+												<a href="#">调味料</a>
+												<span>|</span>
+												<a href="#">酱油</a>
+												<span>|</span>
+												<a href="#">果酱</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口酒</a>
+												<span>、</span>
+												<a href="#">进口饮料</a>
+												<span>、</span>
+												<a href="#">进口水</a>
+											</span>
+											<div>
+												<a href="#">葡萄酒</a>
+												<span>|</span>
+												<a href="#">啤酒</a>
+												<span>|</span>
+												<a href="#">洋酒</a>
+												<span>|</span>
+												<a href="#">起泡酒</a>
+												<span>|</span>
+												<a href="#">果蔬汁</a>
+												<br>
+												<a href="#">饮用水</a>
+												<span>|</span>
+												<a href="#">碳酸饮料</a>
+												<span>|</span>
+												<a href="#">即饮咖啡</a>
+												<span>|</span>
+												<a href="#">乳饮料</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">进口3C家电</a>
+											</span>
+											<div>
+												<a href="#">电饭煲</a>
+												<span>|</span>
+												<a href="#">咖啡机</a>
+												<span>|</span>
+												<a href="#">电水壶</a>
+												<span>|</span>
+												<a href="#">空气净化</a>
+												<br>
+												<a href="#">吸尘器</a>
+												<span>|</span>
+												<a href="#">扫地机</a>
+												<span>|</span>
+												<a href="#">剃须刀</a>
+												<span>|</span>
+												<a href="#">电动牙刷</a>
+												<br>
+												<a href="#">电吹风</a>
+											</div>
+										</li>
+									</ul>
+									<div>
+										<img src="../image/index-nav-10-1.jpg">
+										<img src="../image/index-nav-10-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-weibiaoti2fuzhi09"></i>
+								<a href="#">家用电器</a>
+								<div>
+									<ul>
+										<li>
+											<span><a href="#">面部护肤</a></span>
+											<div>
+												<a href="#">乳液面霜</a>
+												<span>|</span>
+												<a href="#">护肤套装</a>
+												<span>|</span>
+												<a href="#">洁面</a>
+												<span>|</span>
+												<a href="#">面膜</a>
+												<span>|</span>
+												<a href="#">精华</a>
+												<br>
+												<a href="#">爽肤水</a>
+												<span>|</span>
+												<a href="#">面部喷雾</a>
+												<span>|</span>
+												<a href="#">眼霜</a>
+												<span>|</span>
+												<a href="#">润唇膏</a>
+												<span>|</span>
+												<a href="#">卸妆</a>
+												<br>
+												<a href="#">防晒</a>
+												<span>|</span>
+												<a href="#">T区护理</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">美发护肤</a>
+											</span>
+											<div>
+												<a href="#">洗发水</a>
+												<span>|</span>
+												<a href="#">进口洗发水</a>
+												<span>|</span>
+												<a href="#">护发素</a>
+												<span>|</span>
+												<a href="#">发膜</a>
+												<br>
+												<a href="#">洗护套装</a>
+												<span>|</span>
+												<a href="#">头发造型</a>
+												<span>|</span>
+												<a href="#">弹力素</a>
+												<span>|</span>
+												<a href="#">发泥发蜡</a>
+												<br>
+												<a href="#">染发</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">女性护理</a>
+											</span>
+											<div>
+												<a href="#">卫生巾</a>
+												<span>|</span>
+												<a href="#">日用</a>
+												<span>|</span>
+												<a href="#">夜用</a>
+												<span>|</span>
+												<a href="#">安心裤</a>
+												<span>|</span>
+												<a href="#">组合套装</a>
+												<br>
+												<a href="#">卫生护垫</a>
+												<span>|</span>
+												<a href="#">卫生棉条</a>
+												<span>|</span>
+												<a href="#">女性湿巾</a>
+												<br>
+												<a href="#">私处洗液</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">男士护肤</a>
+											</span>
+											<div>
+												<a href="#">洁面</a>
+												<span>|</span>
+												<a href="#">爽肤水</a>
+												<span>|</span>
+												<a href="#">乳液面霜</a>
+												<span>|</span>
+												<a href="#">精华</a>
+												<span>|</span>
+												<a href="#">润唇膏</a>
+												<br>
+												<a href="#">洗发水</a>
+												<span>|</span>
+												<a href="#">沐浴露</a>
+												<span>|</span>
+												<a href="#">剃须刀</a>
+												<span>|</span>
+												<a href="#">剃须泡沫</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">身体护理</a>
+												<span>、</span>
+												<a href="#">沐浴清洁</a>
+											</span>
+											<div>
+												<a href="#">身体乳</a>
+												<span>|</span>
+												<a href="#">洗手液</a>
+												<span>|</span>
+												<a href="#">香皂</a>
+												<span>|</span>
+												<a href="#">泡澡浴盐</a>
+												<br>
+												<a href="#">沐浴露</a>
+												<span>|</span>
+												<a href="#">护手霜</a>
+												<span>|</span>
+												<a href="#">足部护理</a>
+												<span>|</span>
+												<a href="#">身体磨砂</a>
+												<br>
+												<a href="#">美体塑身</a>
+												<span>|</span>
+												<a href="#">精油芳疗</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">彩妆</a>
+											</span>
+											<div>
+												<a href="#">BB霜</a>
+												<span>|</span>
+												<a href="#">隔离</a>
+												<span>|</span>
+												<a href="#">粉底</a>
+												<span>|</span>
+												<a href="#">粉饼</a>
+												<span>|</span>
+												<a href="#">遮瑕</a>
+												<span>|</span>
+												<a href="#">散粉</a>
+												<br>
+												<a href="#">口红</a>
+												<span>|</span>
+												<a href="#">睫毛膏</a>
+												<span>|</span>
+												<a href="#">眼影</a>
+												<span>|</span>
+												<a href="#">眼线</a>
+												<span>|</span>
+												<a href="#">眉笔</a>
+												<br>
+												<a href="#">香水</a>
+												<span>|</span>
+												<a href="#">指甲油</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">美容工具</a>
+												<span>、</span>
+												<a href="#">洗护用具</a>
+											</span>
+											<div>
+												<a href="#">化妆棉</a>
+												<span>|</span>
+												<a href="#">美发梳</a>
+												<span>|</span>
+												<a href="#">美甲工具</a>
+												<span>|</span>
+												<a href="#">眼眉工具</a>
+												<br>
+												<a href="#">面部工具</a>
+												<span>|</span>
+												<a href="#">浴球/浴花</a>
+											</div>
+										</li>
+										
+									</ul>
+									<div>
+										<img src="../image/index-nav-11-1.jpg">
+										<img src="../image/index-nav-11-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-qicheyongpin"></i>
+								<a href="#">运动户外 汽车用品</a>
+								<div>
+									<ul>
+										<li>
+											<span>
+												<a href="#">奶粉</a>
+												<span>、</span>
+												<a href="#">辅食</a>
+											</span>
+											<div>
+												<a href="#">奶粉</a>
+												<span>|</span>
+												<a href="#">1段</a>
+												<span>|</span>
+												<a href="#">2段</a>
+												<span>|</span>
+												<a href="#">3段</a>
+												<span>|</span>
+												<a href="#">4段</a>
+												<span>|</span>
+												<a href="#">孕妈奶粉</a>
+												<br>
+												<a href="#">特殊配方</a>
+												<span>|</span>
+												<a href="#">有机奶粉</a>
+												<span>|</span>
+												<a href="#">面食</a>
+												<span>|</span>
+												<a href="#">米粉粥</a>
+												<br>
+												<a href="#">果蔬肉泥</a>
+												<span>|</span>
+												<a href="#">营养品</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">尿裤/湿巾</a>
+											</span>
+											<div>
+												<a href="#">纸尿裤</a>
+												<span>|</span>
+												<a href="#">NB</a>
+												<span>|</span>
+												<a href="#">S</a>
+												<span>|</span>
+												<a href="#">M</a>
+												<span>|</span>
+												<a href="#">L</a>
+												<span>|</span>
+												<a href="#">XL</a>
+												<span>|</span>
+												<a href="#">拉拉裤</a>
+												<br>
+												<a href="#">婴儿湿巾</a>
+												<span>|</span>
+												<a href="#">纸尿片</a>
+												<span>|</span>
+												<a href="#">成人尿裤</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">宝宝洗护清洁</a>
+											</span>
+											<div>
+												<a href="#">洗发护发</a>
+												<span>|</span>
+												<a href="#">沐浴露</a>
+												<span>|</span>
+												<a href="#">婴儿护肤</a>
+												<span>|</span>
+												<a href="#">牙膏/牙刷</a>
+												<br>
+												<a href="#">驱蚊/防腓</a>
+												<span>|</span>
+												<a href="#">洗衣液</a>
+												<span>|</span>
+												<a href="#">洗衣皂</a>
+												<span>|</span>
+												<a href="#">奶瓶清洁</a>
+												<br>
+												<a href="#">洗手液</a>
+												<span>|</span>
+												<a href="#">坐便器</a>
+												<span>|</span>
+												<a href="#">日常护理</a>
+												<span>|</span>
+												<a href="#">理发器</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">玩具</a>
+											</span>
+											<div>
+												<a href="#">早教益智</a>
+												<span>|</span>
+												<a href="#">彩泥手工</a>
+												<span>|</span>
+												<a href="#">婴幼儿玩具</a>
+												<br>
+												<a href="#">电动玩具</a>
+												<span>|</span>
+												<a href="#">积木拼图</a>
+												<span>|</span>
+												<a href="#">毛绒</a>
+												<span>|</span>
+												<a href="#">娃娃</a>
+												<span>|</span>
+												<a href="#">动漫</a>
+												<br>
+												<a href="#">休闲玩具</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">婴童车床</a>
+												<span>、</span>
+												<a href="#">婴幼家纺</a>
+											</span>
+											<div>
+												<a href="#">安全座椅</a>
+												<span>|</span>
+												<a href="#">婴儿推车</a>
+												<span>|</span>
+												<a href="#">婴儿背带</a>
+												<span>|</span>
+												<a href="#">婴儿床</a>
+												<br>
+												<a href="#">餐椅</a>
+												<span>|</span>
+												<a href="#">自行车</a>
+												<span>|</span>
+												<a href="#">儿童枕</a>
+												<span>|</span>
+												<a href="#">抱被/抱毯</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">哺育喂养用品</a>
+											</span>
+											<div>
+												<a href="#">奶瓶/奶嘴</a>
+												<span>|</span>
+												<a href="#">吸奶器</a>
+												<span>|</span>
+												<a href="#">奶瓶消毒</a>
+												<span>|</span>
+												<a href="#">暖奶器</a>
+												<br>
+												<a href="#">储奶袋/瓶</a>
+												<span>|</span>
+												<a href="#">安抚奶嘴</a>
+												<span>|</span>
+												<a href="#">牙胶咬咬乐</a>
+												<br>
+												<a href="#">BB煲</a>
+												<span>|</span>
+												<a href="#">奶瓶刷/奶嘴刷</a>
+												<span>|</span>
+												<a href="#">儿童餐具</a>
+												<br>
+												<a href="#">吸管杯</a>
+												<span>|</span>
+												<a href="#">调奶器</a>
+											</div>
+										</li>
+								
+									</ul>
+									<div>
+										<img src="../image/index-nav-12-1.jpg">
+										<img src="../image/index-nav-12-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-unie61a"></i>
+								<a href="#">营养滋补 保健器械</a>
+								<div>
+									<ul>
+										<li>
+											<span>
+												<a href="#">时令</a>
+												<span>、</span>
+												<a href="#">特色</a>
+											</span>
+											<div>
+												<a href="#">粽子</a>
+												<span>|</span>
+												<a href="#">玉薇蛋糕</a>
+												<span>|</span>
+												<a href="#">乔西牛奶</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">冷鲜肉/冻肉</a>
+											</span>
+											<div>
+												<a href="#">牛肉</a>
+												<span>|</span>
+												<a href="#">猪肉</a>
+												<span>|</span>
+												<a href="#">羊肉</a>
+												<span>|</span>
+												<a href="#">牛排</a>
+												<span>|</span>
+												<a href="#">牛腱</a>
+												<span>|</span>
+												<a href="#">牛尾</a>
+												<br>
+												<a href="#">羊腿</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">海鲜水产</a>
+											</span>
+											<div>
+												<a href="#">鱼类</a>
+												<span>|</span>
+												<a href="#">三文鱼</a>
+												<span>|</span>
+												<a href="#">鲽鱼</a>
+												<span>|</span>
+												<a href="#">鲳鱼</a>
+												<span>|</span>
+												<a href="#">虾类</a>
+												<br>
+												<a href="#">虾仁</a>
+												<span>|</span>
+												<a href="#">蟹类</a>
+												<span>|</span>
+												<a href="#">帝王蟹</a>
+												<span>|</span>
+												<a href="#">海参</a>
+												<span>|</span>
+												<a href="#">贝类</a>
+												<br>
+												<a href="#">生蚝</a>
+												<span>|</span>
+												<a href="#">扇贝</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">禽类</a>
+												<span>、</span>
+												<a href="#">蛋类</a>
+											</span>
+											</span>
+											<div>
+												<a href="#">鸡肉</a>
+												<span>|</span>
+												<a href="#">鸡腿</a>
+												<span>|</span>
+												<a href="#">鸡翅</a>
+												<span>|</span>
+												<a href="#">鸭肉</a>
+												<span>|</span>
+												<a href="#">其他禽类</a>
+												<br>
+												<a href="#">鸡蛋</a>
+												<span>|</span>
+												<a href="#">鸭蛋</a>
+												<span>|</span>
+												<a href="#">咸鸭蛋</a>
+												<span>|</span>
+												<a href="#">松花皮蛋</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜水果</a>
+											</span>
+											<div>
+												<a href="#">进口水果</a>
+												<span>|</span>
+												<a href="#">国产水果</a>
+												<span>|</span>
+												<a href="#">苹果</a>
+												<span>|</span>
+												<a href="#">梨</a>
+												<span>|</span>
+												<a href="#">柑桔橙</a>
+												<br>
+												<a href="#">猕猴桃</a>
+												<span>|</span>
+												<a href="#">牛油果</a>
+												<span>|</span>
+												<a href="#">火龙果</a>
+												<span>|</span>
+												<a href="#">葡萄提子</a>
+												<br>
+												<a href="#">柚子</a>
+												<span>|</span>
+												<a href="#">龙眼</a>
+												<span>|</span>
+												<a href="#">蓝莓</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜蔬菜</a>
+												<span>、</span>
+												<a href="#">蔬菜随心订</a>
+											</span>
+											<div>
+												<a href="#">有机蔬菜</a>
+												<span>|</span>
+												<a href="#">叶菜类</a>
+												<span>|</span>
+												<a href="#">根茎类</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">速冻食品</a>
+											</span>
+											<div>
+												<a href="#">水饺</a>
+												<span>|</span>
+												<a href="#">汤圆</a>
+												<span>|</span>
+												<a href="#">混沌</a>
+												<span>|</span>
+												<a href="#">包子</a>
+												<span>|</span>
+												<a href="#">馒头</a>
+												<span>|</span>
+												<a href="#">面条</a>
+												<br>
+												<a href="#">鱼丸</a>
+												<span>|</span>
+												<a href="#">贡丸</a>
+												<span>|</span>
+												<a href="#">速冻蔬菜</a>
+											</div>
+										</li>
+										
+									</ul>
+									<div>
+										<img src="../image/index-nav-13-1.jpg">
+										<img src="../image/index-nav-13-2.jpg">
+									</div>
+								</div>
+							</li>
+							<li>
+								<i class="iconfont icon-icon_lipinka"></i>
+								<a href="#">礼品卡 充值 图书</a>
+								<div>
+									<ul>
+										<li>
+											<span>
+												<a href="#">时令</a>
+												<span>、</span>
+												<a href="#">特色</a>
+											</span>
+											<div>
+												<a href="#">粽子</a>
+												<span>|</span>
+												<a href="#">玉薇蛋糕</a>
+												<span>|</span>
+												<a href="#">乔西牛奶</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">冷鲜肉/冻肉</a>
+											</span>
+											<div>
+												<a href="#">牛肉</a>
+												<span>|</span>
+												<a href="#">猪肉</a>
+												<span>|</span>
+												<a href="#">羊肉</a>
+												<span>|</span>
+												<a href="#">牛排</a>
+												<span>|</span>
+												<a href="#">牛腱</a>
+												<span>|</span>
+												<a href="#">牛尾</a>
+												<br>
+												<a href="#">羊腿</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">海鲜水产</a>
+											</span>
+											<div>
+												<a href="#">鱼类</a>
+												<span>|</span>
+												<a href="#">三文鱼</a>
+												<span>|</span>
+												<a href="#">鲽鱼</a>
+												<span>|</span>
+												<a href="#">鲳鱼</a>
+												<span>|</span>
+												<a href="#">虾类</a>
+												<br>
+												<a href="#">虾仁</a>
+												<span>|</span>
+												<a href="#">蟹类</a>
+												<span>|</span>
+												<a href="#">帝王蟹</a>
+												<span>|</span>
+												<a href="#">海参</a>
+												<span>|</span>
+												<a href="#">贝类</a>
+												<br>
+												<a href="#">生蚝</a>
+												<span>|</span>
+												<a href="#">扇贝</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">禽类</a>
+												<span>、</span>
+												<a href="#">蛋类</a>
+											</span>
+											</span>
+											<div>
+												<a href="#">鸡肉</a>
+												<span>|</span>
+												<a href="#">鸡腿</a>
+												<span>|</span>
+												<a href="#">鸡翅</a>
+												<span>|</span>
+												<a href="#">鸭肉</a>
+												<span>|</span>
+												<a href="#">其他禽类</a>
+												<br>
+												<a href="#">鸡蛋</a>
+												<span>|</span>
+												<a href="#">鸭蛋</a>
+												<span>|</span>
+												<a href="#">咸鸭蛋</a>
+												<span>|</span>
+												<a href="#">松花皮蛋</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜水果</a>
+											</span>
+											<div>
+												<a href="#">进口水果</a>
+												<span>|</span>
+												<a href="#">国产水果</a>
+												<span>|</span>
+												<a href="#">苹果</a>
+												<span>|</span>
+												<a href="#">梨</a>
+												<span>|</span>
+												<a href="#">柑桔橙</a>
+												<br>
+												<a href="#">猕猴桃</a>
+												<span>|</span>
+												<a href="#">牛油果</a>
+												<span>|</span>
+												<a href="#">火龙果</a>
+												<span>|</span>
+												<a href="#">葡萄提子</a>
+												<br>
+												<a href="#">柚子</a>
+												<span>|</span>
+												<a href="#">龙眼</a>
+												<span>|</span>
+												<a href="#">蓝莓</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">新鲜蔬菜</a>
+												<span>、</span>
+												<a href="#">蔬菜随心订</a>
+											</span>
+											<div>
+												<a href="#">有机蔬菜</a>
+												<span>|</span>
+												<a href="#">叶菜类</a>
+												<span>|</span>
+												<a href="#">根茎类</a>
+											</div>
+										</li>
+										<li>
+											<span>
+												<a href="#">速冻食品</a>
+											</span>
+											<div>
+												<a href="#">水饺</a>
+												<span>|</span>
+												<a href="#">汤圆</a>
+												<span>|</span>
+												<a href="#">混沌</a>
+												<span>|</span>
+												<a href="#">包子</a>
+												<span>|</span>
+												<a href="#">馒头</a>
+												<span>|</span>
+												<a href="#">面条</a>
+												<br>
+												<a href="#">鱼丸</a>
+												<span>|</span>
+												<a href="#">贡丸</a>
+												<span>|</span>
+												<a href="#">速冻蔬菜</a>
+											</div>
+										</li>
+										
+									</ul>
+									<div>
+										<img src="../image/index-nav-14-1.jpg">
+										<img src="../image/index-nav-14-2.jpg">
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div>
+					<a href="http://localhost/bl_com/html/list.html#"><img src="../image/index-banner-shry.gif" ></a>
+					<a href="http://localhost/bl_com/html/list.html#"><img src="../image/index-banner-24hbh.gif" ></a>
+					<a href="http://localhost/bl_com/html/list.html#"><img src="../image/index-banner-qqg.gif" ></a>
+					<a href="http://localhost/bl_com/html/list.html#"><img src="../image/index-banner-jpsg.gif" ></a>
+					<a href="http://localhost/bl_com/html/list.html#"><img src="../image/index-banner-dqc.gif" ></a>
+					<a href="http://localhost/bl_com/html/list.html#"><img src="../image/index-banner-aldg.gif" ></a>
+					<a href="http://localhost/bl_com/html/list.html#">礼品卡</a>
+					<a href="http://localhost/bl_com/html/list.html#"><img src="../image/index-head-kdj_car.gif" ></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="details-content">
+		<div class="container">
+			<div class="levels">
+				<i class="iconfont icon-jiantouxiangzuo"></i>
+				<a href="#">珠宝饰品/手表眼镜</a>
+				<span>|</span>
+				<a href="#">手表/配件</a>
+				<span>|</span>
+				<a href="#">手表</a>
+				<span>天梭（TISSOT）</span>
+			</div>
+			<div class="productInformation">
+				<div class="productInformationLeft">
+					<div class="productInformationLeftWatch">
+						<div class="zoomWatch">
+							<div class="zoom" ><img src="../image/list/watch1-1.jpg" data-big="../image/list/watch1.jpg" class="imgProductId"></div>
+							<ul class="small-list">
+								<li><img src="../image/list/watch1-1.jpg" alt="" class="imgId1" class="u-flyer" ></li>
+								<li><img src="../image/list/watch1-2.jpg" alt="" class="imgId2"></li>
+								<li><img src="../image/list/watch1-3.jpg" alt="" class="imgId3"></li>
+								<li><img src="../image/list/watch1-4.jpg" alt="" class="imgId4"></li>
+							</ul>
+						</div>
+						<div>
+							<span>商品编号 303010000933</span>
+							<i class="iconfont icon-shoucang"></i>
+							<span>收藏</span>
+							<div>
+								<span>
+									<i class="iconfont icon-index-cion"></i>
+									<span>分享</span>
+									<i class="iconfont icon-ananzuiconv265"></i>
+								</span>
+								<span>
+									<i class="iconfont icon-weixin"></i>
+									<i class="iconfont icon-iconfontweibowukuang"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="productInformationLeftMain">
+						<h5 class="detailsName">天梭TISSOT PR100系列机械男表 T101.407.11.051.00 瑞士进口</h5>
+						<div>
+							<div>
+								<span>销  售  价</span>
+								<span>￥</span>
+								<span class="detailsPrice">4792.00</span>
+							</div>
+							<div>
+								<span>好  评  率</span>
+								<i class="iconfont icon-dianzan"></i>
+								<span>100</span>
+								<span>%（共</span>
+								<a href="#">0</a>
+								<span>条评价）</span>
+							</div>
+						</div>
+						<div>
+							<div>
+								<p>评论活动</p>
+								<span>评价返积分</span>
+								<a href="#">查看详情</a>
+							</div>
+							<div>
+								<p>促销活动</p>
+								<span>满减</span>
+								<span>满520减120，可累10次</span>
+								<a href="#">立即参与</a>
+							</div>
+							<div>
+								<p>配 送 至</p>
+								<div class="LacationTab">
+									<span>广东广州白云区
+									<i class="iconfont icon-ananzuiconv265"></i>
+									</span>
+									
+								</div>
+								<div class="tab">
+										<div class="title">
+											<span>省份</span>
+											<span>城市</span>
+											<span>县区</span>
+										</div>
+										<div class="content">
+											<div>
+												<ul>
+													<li>安徽</li>
+													<li>北京</li>
+													<li>福建</li>
+													<li>甘肃</li>
+													<li>广东</li>
+													<li>广西</li>
+													<li>贵州</li>
+													<li>海南</li>
+													<li>河北</li>
+													<li>河南</li>
+													<li>黑龙江</li>
+													<li>湖北</li>
+													<li>湖南</li>
+													<li>吉林</li>
+													<li>江苏</li>
+													<li>江西</li>
+													<li>辽宁</li>
+													<li>内蒙古</li>
+													<li>宁夏</li>
+													<li>青海</li>
+													<li>山东</li>
+													<li>山西</li>
+													<li>陕西</li>
+													<li>上海</li>
+													<li>四川</li>
+													<li>天津</li>
+													<li>西藏</li>
+													<li>新疆</li>
+													<li>云南</li>
+													<li>浙江</li>
+													<li>重庆</li>
+												</ul>
+											</div>
+											<div>
+												<ul>
+													<li>潮州</li>
+													<li>东莞</li>
+													<li>佛山</li>
+													<li>广州</li>
+													<li>河源</li>
+													<li>惠州</li>
+													<li>江门</li>
+													<li>揭阳</li>
+													<li>茂名</li>
+													<li>梅州</li>
+													<li>清远</li>
+													<li>汕头</li>
+													<li>汕尾</li>
+													<li>韶关</li>
+													<li>深圳</li>
+													<li>阳江</li>
+													<li>云浮</li>
+													<li>湛江</li>
+													<li>肇庆</li>
+													<li>中山</li>
+													<li>珠海</li>
+												</ul>
+											</div>
+											<div>
+												<ul>
+													<li>萝岗区</li>
+													<li>白云区</li>
+													<li>从化</li>
+													<li>东山区</li>
+													<li>番禺区</li>
+													<li>芳村区</li>
+													<li>海珠区</li>
+													<li>花都区</li>
+													<li>黄浦区</li>
+													<li>荔湾区</li>
+													<li>市辖区</li>
+													<li>天河区</li>
+													<li>越秀区</li>
+													<li>增城</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								<span>免运费</span>
+								<p>本产品由联营商发货，并由百联提供售后    下单后3-5个工作日内发货</p>
+							</div>
+							<div>
+								<p>服      务</p>
+								<span>运</span>
+								<span>运费说明</span>
+								<span>提</span>
+								<span>不支持到点自提</span>
+								<span>退</span>
+								<span>不支持7天无理由退货</span>
+							</div>
+						</div>
+						<div>
+							<div>
+								<span>购买数量</span>
+								<input type="text" placeholder="1" class="shuliang">
+								<button class="countAdd">+</button>
+								<button class="countMin">-</button>
+							</div>
+						</div>
+						<div>
+							<button class="ljBuyBtn">立即购买</button>
+							<button class="putInCar m-tip">
+								<i class="iconfont icon-gouwuchekong"></i>
+								加入购物车
+							</button>
+							<p>
+								<i class="iconfont icon-chuanchengshejiiconzitihua01"></i>
+								支持手机掌上购买
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="productInformationRight">
+					<span>···············大家都在买···············</span>
+					<div>
+						<img src="../image/list/watch12-1.jpg" alt="">
+						<span>￥20867.0</span>
+						<a href="#">欧米茄 OMEGA手表</a>
+					</div>
+					<div>
+						<img src="../image/list/watch14-1.jpg" alt="">
+						<span>￥20867.0</span>
+						<a href="#">欧米茄 OMEGA手表</a>
+					</div>
+					<div>
+						<img src="../image/list/watch15-1.jpg" alt="">
+						<span>￥20867.0</span>
+						<a href="#">欧米茄 OMEGA手表</a>
+					</div>
+					<span>·······················································</span>
+					<div>
+						<i class="iconfont icon-huan"></i>
+						<span>换一换</span>
+					</div>
+				</div>
+			</div>
+			<div class="introduce clearfix">
+				<div class="introduceLeft">
+					<div class="seeSee">
+						<span>看了又看</span>
+						<div>
+							<img src="../image/list/watch13-1.jpg" alt="">
+							<span>￥4750.0</span>
+							<a href="#">天梭TISSOT 唯意系列机械男表T038.4</a>
+						</div>
+						<div>
+							<img src="../image/list/watch16-1.jpg" alt="">
+							<span>￥4750.0</span>
+							<a href="#">天梭TISSOT 唯意系列机械男表T038.4</a>
+						</div>
+						<div>
+							<img src="../image/list/watch23-1.jpg" alt="">
+							<span>￥4750.0</span>
+							<a href="#">天梭TISSOT 唯意系列机械男表T038.4</a>
+						</div>
+						<div>
+							<img src="../image/list/watch24-1.jpg" alt="">
+							<span>￥4750.0</span>
+							<a href="#">天梭TISSOT 唯意系列机械男表T038.4</a>
+						</div>
+						<div>
+							<img src="../image/list/watch2-1.jpg" alt="">
+							<span>￥4750.0</span>
+							<a href="#">天梭TISSOT 唯意系列机械男表T038.4</a>
+						</div>
+					</div>
+					<div class="seeBuy">
+						<span>看了最终买</span>
+						<div>
+							<img src="../image/list/watch11-1.jpg" alt="">
+							<span>￥4750.0</span>
+							<a href="#">天梭TISSOT 唯意系列机械男表T038.4</a>
+						</div>
+						<div>
+							<img src="../image/list/watch19-1.jpg" alt="">
+							<span>￥4750.0</span>
+							<a href="#">天梭TISSOT 唯意系列机械男表T038.4</a>
+						</div>
+						<div>
+							<img src="../image/list/watch21-1.jpg" alt="">
+							<span>￥4750.0</span>
+							<a href="#">天梭TISSOT 唯意系列机械男表T038.4</a>
+						</div>
+						<div>
+							<img src="../image/list/watch25-1.jpg" alt="">
+							<span>￥4750.0</span>
+							<a href="#">天梭TISSOT 唯意系列机械男表T038.4</a>
+						</div>
+						<div>
+							<img src="../image/list/watch27-1.jpg" alt="">
+							<span>￥4750.0</span>
+							<a href="#">天梭TISSOT 唯意系列机械男表T038.4</a>
+						</div>
+					</div>
+				</div>
+				<div class="introduceRight">
+					<div>
+						<span>商品介绍</span>
+						<span>参数及包装</span>
+						<span>售后服务</span>
+						<span>评价详情</span>
+					</div>
+					<img src="../image/details/1.jpg" alt="">
+					<img src="../image/details/2.jpg" alt="">
+					<img src="../image/details/3.png" alt="">
+					<div class="evaluate">
+						<span>全部评论（0）</span>
+						<span>好评（0）</span>
+						<span>中评（0）</span>
+						<span>差评（0）</span>
+						<span>有晒单（0）</span>
+						<span>追评（0）</span>
+					</div>
+				</div>
+				
+				<div class="detailsHistory">
+					<span>最近浏览及相关推荐</span>
+					<ul>
+						<li>
+							<img src="../image/list/watch16-1.jpg" alt="">
+							<span>￥5171.0</span>
+						</li>
+						<li>
+							<img src="../image/list/watch17-1.jpg" alt="">
+							<span>￥5171.0</span>
+						</li>
+						<li>
+							<img src="../image/list/watch26-1.jpg" alt="">
+							<span>￥5171.0</span>
+						</li>
+						<li>
+							<img src="../image/list/watch26-1.jpg" alt="">
+							<span>￥5171.0</span>
+						</li>
+						<li>
+							<img src="../image/list/watch4-1.jpg" alt="">
+							<span>￥5171.0</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer id="foot">
+		<div class="list">
+			<ul>
+				<li class="list-1">
+					<div>
+						<span>
+							<i class="iconfont icon-denglu"></i>
+						</span>
+						<span>新手入门</span>
+					</div>
+					<ul>
+						<li>购物流程</li>
+						<li>会员介绍</li>
+						<li>常见问题</li>
+						<li>发票说明</li>
+						<li>练习客服</li>
+					</ul>
+				</li>
+				<li class="list-2">
+					<div>
+						<span>
+							<i class="iconfont icon-peisong"></i>
+						</span>
+						<span>配送服务</span>
+					</div>
+					<ul>
+						<li>配送范围及运费</li>
+						<li>配送进度查询</li>
+						<li>自提服务</li>
+						<li>商品验货与签收</li>
+					</ul>
+				</li>
+				<li class="list-3">
+					<div>
+						<span>
+							<i class="iconfont icon-zhifufangshi-copy"></i>
+						</span>
+						<span>支付方式</span>
+					</div>
+					<ul>
+						<li>货到付款</li>
+						<li>在线支付</li>
+					</ul>
+				</li>
+				<li class="list-4">
+					<div>
+						<span>
+							<i class="iconfont icon-shouhoufuwu"></i>
+						</span>
+						<span>售后服务</span>
+					</div>
+					<ul>
+						<li>退换货政策</li>
+						<li>退换货流程</li>
+						<li>退款说明</li>
+					</ul>
+				</li>
+				<li class="list-5">
+					<div>
+						<span>
+							<i class="iconfont icon-shengxianshipin"></i>
+						</span>
+						<span>特色服务</span>
+					</div>
+					<ul>
+						<li>优鲜集市</li>
+						<li>生鲜随心订</li>
+						<li>精选篮筐</li>
+						<li>全球购</li>
+						<li>精品闪购</li>
+						<li>百联到家</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div class="footer-foot">
+			<ul>
+				<li>
+					<span><a href="#">关于我们</a></span>
+					<span>|</span>
+					<span><a href="#">联系我们</a></span>
+					<span>|</span>
+					<span><a href="#">加盟合作</a></span>
+					<span>|</span>
+					<span>诚征英才</span>
+					<span>|</span>
+					<span>友情链接</span>
+				</li>
+				<li>
+					<span>百联集团有限公司旗下 上海百联全渠道电子商务有限公司版权所有</span>
+					<span>|</span>
+					<span>客服电话：400-900-8800 </span>
+					<span>|</span>
+					<span>沪ICP备15028847号</span>
+				</li>
+				<li>
+					<a href="#">互联网药品信息服务资质证书编号：沪-（非营业性）-2016-0044</a>
+				</li>
+				<li>
+					<ul>
+						<li>
+							<img src="../image/index-foot-gongan.png" alt="">
+							<a href="#">沪公网安备 310101020022366号</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-wangjing.png" alt="">
+							<a href="#">网购大家评</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-gongs.png" alt="">
+							<a href="#">上海工商</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-zhizhao.png" alt="">
+							<a href="#">经营执照</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</footer>
+	<div class="right-slidebar" id="rside">
+		<div class="right-slidebar-left" id="rsidein">
+			<div class="right-slidebar-login xinxi">
+				<i class="iconfont icon-user"></i>
+				<span>我的信息</span>
+			</div>
+			<div class="right-slidebar-car">
+				<i class="iconfont icon-peisong" id="end"></i>
+				<span>购<br>物<br>车</span>
+				<span class="slinum slinum1">0</span>
+			</div>
+			<div class="right-slidebar-login shoucang">
+				<i class="iconfont icon-shoucang"></i>
+				<span>我的收藏</span>
+			</div>
+			<div class="right-slidebar-login liulanlishi">
+				<i class="iconfont icon-lishijilu"></i>
+				<span>浏览历史</span>
+			</div>
+			<div class="right-slidebar-login zhuanxiang">
+				<i class="iconfont icon-shoucang"></i>
+				<span>
+					<i class="iconfont icon-shoujishuma"></i>
+					<span>手机APP专享</span>
+					<img src="../image/index-weixingongzhonghao.png" alt="">
+				</span>
+			</div>
+			<div class="right-slidebar-login kefu">
+				<i class="iconfont icon-lishijilu"></i>
+				<span>我的客服</span>
+			</div>
+		</div>
+		<div class="right-slidebar-right">
+			<div class="right-slidebar-right-car">
+				<div class="rightTop">
+					<i class="iconfont icon-xiangyoujiantou"></i>
+					<a href="#"><i class="iconfont icon-gouwuchekong"></i></a>
+				</div>
+				<div class="rightBody">
+					<ul class="rightBodyUl">
+						<!-- <li>
+							<img src="../image/list/watch1.png" alt="" class="imgProductId">
+							<span>
+								<span class="detailsName">天梭TISSOT 力洛克系列钢带机械男表 T006.428.22.038.01 瑞士进口</span>
+								<span class="detailsPrice">￥4358.00 &times; 1</span>
+							</span>
+							<span class="totalPrice">￥4358.00</span>
+						</li> -->
+					</ul>
+				</div>
+				<div class="rightFoot">
+					<div>
+						<span>共</span>
+						<span  class="slinum slinum2">0</span>
+						<span>种商品，总计:</span>
+						<span class="totalTotalPrice">￥0</span>
+					</div>
+					<button class="goTocar">查看购物车</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

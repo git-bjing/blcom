@@ -1,0 +1,133 @@
+@import 'common';
+
+#rside{
+	height: 685px;
+	//right:0;
+	right: -276px;
+	z-index: 2000;width: 314px;
+    position: fixed;top: 0;
+    color: #fff;background-color: #FFF;
+    #rsidein{
+    	width: 38px;height: 685px;
+    	background-color: #333333;float:left;
+    	padding-top:115px;position:relative;
+    	.right-slidebar-login{
+    		height: 40px;padding-top:10px;
+    		padding-left:8px;position:relative;
+    		margin-bottom:5px;
+    		&>i{color:#fff;font-size:22px;}
+    		&>span{display:block;height: 40px;width: 100px;
+				position:absolute;top:0;
+				left:-100px;background-color: #FFF;color:#333333;
+				font-size:16px;padding-top:9px;
+				padding-left:15px;border:1px solid #BBBBBB;
+				display:none;
+    		}
+    	}
+    	.right-slidebar-login:hover{background-color: $mainColor}
+    	.right-slidebar-login:hover span{display:block}
+    	.right-slidebar-car{
+    		background-color: #333333;
+    		height: 174px;padding-top:10px;
+    		border:1px solid #BBBBBB;
+    		padding-left:8px;width: 42px;
+    		position:relative;top:0;left:-4px;
+			margin-bottom:5px;
+    		i{display:block;height: 35px;
+    			color:#fff;font-size:22px;}
+    		span:nth-child(2){
+    			display:block;
+    			height:80px;
+    			color:#fff;font-size:16px;
+    			margin-left:5px;
+    		}
+    		span:nth-child(3){
+    			margin-left:5px;
+    			display:block;
+    			height:20px;
+    			width: 20px;
+    			border-radius:50%;
+    			background-color: $mainColor;
+    			color:#fff;font-size:14px;
+    			padding-left:6px;}
+    	}
+    	.right-slidebar-car:hover{background-color: $mainColor}
+    	.zhuanxiang{
+    		margin-top:150px;
+			&>span{
+				display:block;height: 140px;width: 120px;
+				position:absolute;top:-70px;
+				left:-120px;background-color: #FFF;color:#333333;
+				padding-top:9px;
+				padding-left:15px;border:1px solid #BBBBBB;
+				display:none;
+				i{display:block;height: 10px;
+    			color:#333;font-size:8px;float:left;}
+    			span{display:block;height: 10px;
+    			color:#333;font-size:8px;float:left;}
+    			img{display:block;width: 90px;height: 90px;
+    				float:left;margin-top:15px;}
+    		}
+    	}
+    }
+    .right-slidebar-right{
+        height: 685px;
+        width: 276px;float:right;
+        position:relative;
+        .right-slidebar-right-car{
+            width: 100%;height: 100%;
+            position:absolute;
+            top:685px;
+            position:relative;
+            .rightTop{
+                padding-left:10px;
+                padding-right:10px;
+                height: 45px;background-color: #F2F2F2;
+                &>i{display:inline-block;line-height: 45px;}
+                a{display:inline-block;line-height: 45px;}
+                i:nth-child(1){float:left;color:#999999;}
+                a:nth-child(2){float:right;color:#999999;}
+            }
+            .rightBody{
+                height: 100%;width: 100%;
+                ul{
+                    li{
+                        height: 70px;
+                        padding:10px;
+                        img{float:left;display:inline-block;width: 48px;border:1px solid #ddd;}
+                        &>span{display:inline-block;
+                            width: 126px;color:#333;
+                            float:left;
+                            .detailsName{display:inline-block;
+                                height: 32px;overflow:hidden;
+                            }
+                            .detailsPrice{display:inline-block;
+                                height: 15px;
+                            }
+                        }
+                        .totalPrice{float:left;
+                            display:inline-block;
+                            width: 81px;
+                            color:$mainColor;
+                            font-weight:bold;
+                        }
+                    }
+                }
+            }
+            .rightFoot{
+                position:absolute;bottom:0;left:0;
+                background-color: #F2F2F2;color:#999999;
+                height: 90px;width: 100%;
+                div{height: 35px;width: 100%;
+                    padding-top:11px;padding-left:10px;
+                    .slinum2,.totalTotalPrice{color:$mainColor;}
+                }
+                button{height: 40px;width: 260px;
+                    background-color: $mainColor;
+                    color:white;border:1px solid $mainColor;
+                    border-radius:3%;
+                    margin-left:10px;}
+            }
+        }
+    }
+}

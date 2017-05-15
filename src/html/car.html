@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>购物车</title>
+	<link rel="stylesheet" href="../css/index-header.css">
+	<link rel="stylesheet" href="../css/index-foot.css">
+	<link rel="stylesheet" href="../css/car.css">
+	<script src="../js/lib/jquery-3.2.1.js"></script>
+	<script src="../js/common.js"></script>
+	<script>
+		$(function(){
+			//标签切换
+			var LacationTab = document.getElementsByClassName('LacationTab')[0];
+			var tab = document.getElementsByClassName('tab')[0];
+			var title = tab.firstElementChild.children;
+			var content = tab.lastElementChild.children;
+			var closeNum = false;
+			LacationTab.onclick = function(){
+				if(!closeNum){
+					tab.style.display = 'block';	
+					closeNum = true;
+				}else{
+					tab.style.display = 'none';
+					closeNum = false;
+				}
+			}
+			if(!closeNum){
+				for(var i=0;i<title.length;i++){
+					title[i].setAttribute('data-idx',i);
+					title[i].onclick = function(){
+						var idx = this.getAttribute('data-idx');
+						for(var i=0;i<title.length;i++){
+							title[i].className = '';
+							content[i].style.display = 'none';
+						}
+						this.className = 'active';
+						content[idx].style.display = 'block';
+					}
+				}
+				content[0].style.display = 'block';
+				title[0].className = 'active';
+			}
+
+			//计算数量加减
+			// var num = 1;
+			// $('.carCountBtnMin').on('click',function(){
+			// 	if(num === 1){
+			// 		$('.count').val(1);
+			// 	}else{
+			// 		num--;
+			// 		$('.count').val(num);
+			// 	}
+			// 	console.log(num)
+			// })
+			// $('.carCountBtnAdd').on('click',function(){
+			// 	if(num === 100){
+			// 		$('.count').val(100);
+			// 	}else{
+			// 		num++;
+			// 		$('.count').val(num);
+			// 	}
+			// })
+
+
+
+			/*
+			.carBoxUl        ul容器
+			.sigleTotalCountPrice 单种商品折扣金额
+			.sigleTotalPrice 未折扣的单种商品总价
+			.carImg          商品图片链接
+			.carProname      商品名称
+			.originalPrice   商品单价
+			.count           单种商品个数
+			.Price           单种商品折后最终总价
+			.delete          删除单个种类商品
+			#allCheck1       全选
+			.deleteCheck     删除选中商品
+			.selectCount     已选择商品的种类数
+			.totalDiscount   已优惠的价格
+			.totalPrice      最终总价格
+			carlist          cookie名字
+			*/
+			
+
+			
+			//初始化
+			var totalPrice = 0;
+
+			//读取cookie
+			var goodslist = getCookie('carlist');
+			//把json字符串转换成js对象
+			goodslist = goodslist ? JSON.parse(goodslist) : [];
+			// 把cookie中的商品写入.carBoxUl
+
+			var selectCount = 0;
+			var totalDiscount = 0;
+			var totalPrice = 0;
+
+			//遍历cookie 并把商品内容写入购物车
+			for(var i = 0; i<= goodslist.length-1; i++){
+				var li = $('<li/>');
+				goodslist[i].price = goodslist[i].price.replace(',','');
+				var sigleTotalPrice = parseInt(goodslist[i].price) * goodslist[i].qty;
+				
+				if(Math.floor(sigleTotalPrice/520)<=10){
+					var sigleTotalCountPrice = Math.floor(sigleTotalPrice/520)*120;
+				}else{
+					sigleTotalCountPrice = 1200;
+				}
+
+				var Price = sigleTotalPrice - sigleTotalCountPrice;
+
+
+				selectCount = goodslist.length;
+				totalDiscount += sigleTotalCountPrice;
+				totalPrice += Price;
+
+				li.html(`<div class="carLeftCheck">	
+					<span>·</span>
+					<input type="checkbox" class="singleCheck">
+				</div>
+				<div class="carRight">
+					<div class="carRightTop">
+						<span>【参与满减】满520减120，最多10次</span>
+						<a href="#">查看活动></a>
+						<span class="sigleTotalPrice">￥${sigleTotalPrice}.00元 减：</span>
+						<span class="sigleTotalCountPrice">￥${sigleTotalCountPrice}.00</span>
+					</div>
+					<div class="carRightContent">
+						<div>
+							<img src="${goodslist[i].imgurl}" alt="" class="carImg">
+						</div>
+						<span>
+							<span class="proname">
+								<span>全球购</span>
+								<a href="#" class="carProname">${goodslist[i].name}</a>
+							</span>
+						</span>
+						<span class="originalPrice">￥${goodslist[i].price}.00</span>
+						<div class="countBox">
+							<button class="carCountBtnMin">- </button>
+							<span  class="count">${goodslist[i].qty}</span>
+							<button class="carCountBtnAdd">+ </button>
+							<span>库存紧张</span>
+						</div>
+						<span class="Price">￥${Price}.00</span>
+						<div>
+							<a href="#">移入收藏夹</a>
+							<button class="delete">删除</button>
+						</div>
+					</div>
+				</div>`)
+
+				
+				$('.carBoxUl').append(li);
+
+
+
+				//计算数量加减
+				//有Bug 好气！！！！！ 但觉得自己没有不对！！！！！！
+				// console.log(goodslist[i])
+				// var countQty =parseInt(goodslist[i].qty);
+				
+				// //var num = 1;
+				
+				// $('.carCountBtnMin').on('click',function(){
+				// 	if(goodslist[i].qty == 1){
+				// 		$('.count').html(1);
+				// 	}else{
+				// 		goodslist[i].qty--;
+				// 		$('.count').html(goodslist[i].qty);
+				// 	}
+				// })
+				// $('.carCountBtnAdd').on('click',function(){
+				// 	if(goodslist[i].qty == 100){
+				// 		$('.count').html(100);
+				// 	}else{
+				// 		goodslist[i].qty++;
+				// 		$('.count').html(goodslist[i].qty);
+				// 	}
+				// })
+				
+				
+			
+
+
+			}
+			//删除单个商品
+			$('.delete').on('click',function(){
+				$self = $(this);
+				$thisLi = $self.parents('li');
+				var src = $thisLi.find('.carImg').attr('src');
+				$thisLi.remove();
+				
+				for(var i = 0; i<= goodslist.length-1; i++){
+					if(goodslist[i].imgurl == src){
+						goodslist.splice(i,1);
+						break;
+					}
+				}
+				setCookie('carlist',JSON.stringify(goodslist));
+				location.reload();
+
+					
+			})
+
+
+
+			//写入商品件数、总折扣价格、总价格
+			$('.selectCount').html(selectCount)
+			$('.totalDiscount').html(`-￥${totalDiscount}.00`)
+			$('.totalPrice').html(`￥${totalPrice}.00`)
+
+			
+			
+			//.allCheck 全选框
+			//.singleCheck 商品单独的选框
+			//全选实现
+			$('.allCheck').each(function(dix,ele){
+				$(ele).on('click',function(){
+					var checkAll = $(ele).prop('checked');
+					//console.log($('.singleCheck'))
+					$('.singleCheck').prop('checked',checkAll);
+				})
+			})
+
+			$('.singleCheck').each(function(dix,ele){
+				$(ele).on('click',function(){
+					$('.allCheck').prop('checked',false);
+				})
+			})
+			//删除键删除已选择商品
+			$('.deleteCheck').on('click',function(){
+				$self = $(this);
+				var $checkedSingleInput = $(".singleCheck:checked");
+				
+				$checkedLi = $checkedSingleInput.parents('li');
+				
+				$checkedLi.each(function(dix,ele){
+					console.log($checkedLi)
+					var checkedsrc = $(ele).find('.carImg').attr('src');
+					$(ele).remove();
+
+					for(var i = 0; i<= goodslist.length-1; i++){
+						if(goodslist[i].imgurl == checkedsrc){
+							goodslist.splice(i,1);
+							break;
+						}
+					}
+					setCookie('carlist',JSON.stringify(goodslist));
+					location.reload();
+				})
+				
+			})
+			//点击logo 回到首页
+			$('.goHome').on('click',function(){
+				window.location.href = 'http://localhost/bl_com/index.html#';
+			})
+
+		})
+	</script>
+</head>
+<body>
+	<header id="top">
+		<div class="tools">
+			<div class="container">
+				<ul class="toolsLeft">
+					<li>
+						<i class="iconfont icon-fill1fill2"></i>
+						<p><span>百联集团旗下全渠道电商平台</span></p>
+					</li>
+					<li>
+						<a href="#">网站导航</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li><a href="#">百联集团官网</a></li>
+							<li><a href="#">安付宝网</a></li>
+							<li><a href="#">第一医药</a></li>
+							<li><a href="#">OK会员卡专区</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">消息</a>
+					</li>
+				</ul>
+				<ul class="toolsRight">
+					<li>
+						<i class="iconfont icon-denglu"></i>
+						<span>
+							<a href="http://localhost/bl_com/html/log.html#">请登录</a>
+						</span>
+						<span>
+							<a href="http://localhost/bl_com/html/register.html#">注册</a>
+						</span>
+					</li>
+					<li>
+						<a href="#">我的订单</a>
+					</li>
+					<li>
+						<a href="#">我的百联</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li><a href="#">我的订单</a></li>
+							<li><a href="#">我的评价</a></li>
+							<li><a href="#">我的积分</a></li>
+							<li><a href="#">我的收藏</a></li>
+							<li><a href="#">我的优惠券</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">充值缴费</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li>
+								<p>水电煤缴费</p>
+								<ul>
+									<li><a href="#">缴费首页</a></li>
+									<li><a href="#">水费缴费</a></li>
+									<li><a href="#">电费缴费</a></li>
+									<li><a href="#">燃气缴费</a></li>
+								</ul>
+							</li>
+							<li>
+								<p>手机充值</p>
+								<ul>
+									<li><a href="#">手机充值</a></li>
+									<li><a href="#">流量充值</a></li>
+									<li><a href="#">更多充值</a></li>
+								</ul>
+							</li>
+							<li>
+								<p>其他缴费</p>
+								<ul>
+									<li><a href="#">加油卡充值</a></li>
+									<li><a href="#">固话/宽带充值</a></li>
+									<li><a href="#">铁通缴费</a></li>
+									<li><a href="#">有限电视缴费</a></li>
+								</ul>
+							</li>
+							<li>
+								<p>游戏点卡</p>
+								<ul>
+									<li><a href="#">腾讯Q币充值</a></li>
+									<li><a href="#">盛大点券充值</a></li>
+									<li><a href="#">游戏中心</a></li>
+									<li><a href="#">更多游戏</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">客户服务</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<ul>
+							<li><a href="#">在线客服</a></li>
+							<li><a href="#">帮助中心</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">掌上百联</a>
+						<i class="iconfont icon-ananzuiconv265"></i>
+						<span>
+							<img src="../image/index-erweima.jpg">
+							<p>i百联APP</p>
+							<p>手机购物更方便</p>
+						</span>
+					</li>
+					<li>
+						<a href="#">购物车</a>
+					</li>
+					<li>
+						<a href="#">关注我们</a>
+						<i class="iconfont icon-iconfontweibowukuang"></i>
+						<i class="iconfont icon-weixin"></i>
+						<ul>
+							<li>
+								<img src="../image/index-weibo.png">
+								<p>点击关注</p>
+								<p>i百联新浪微博</p>
+							</li>
+							<li>
+								<img src="../image/index-weixingongzhonghao.png">
+								<p>扫一扫关注</p>
+								<p>i百联微信公众号</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="header">
+			<div class="container">
+				<div class="headerLogo">
+					<img src="../image/header-logo.png" class="goHome">
+				</div>
+				<span>
+					<span>现在</span>
+					<a href="http://localhost/bl_com/html/log.html">登陆</a>
+					<span>,您购物车中的商品将会被永久保存</span>
+				</span>
+			</div>
+		</div>
+	</header>
+	<div class="carBody">
+		<div class="container">
+			<div class="carTop">
+				<h4>
+					全部商品
+					<span id="productNum">2</span>
+				</h4>
+				<div>
+					<p>配 送 至</p>
+					<div class="LacationTab">
+						<span>广东广州白云区
+						<i class="iconfont icon-ananzuiconv265"></i>
+						</span>
+					</div>
+					<div class="tab">
+							<div class="title">
+								<span>省份</span>
+								<span>城市</span>
+								<span>县区</span>
+							</div>
+							<div class="content">
+								<div>
+									<ul>
+										<li>安徽</li>
+										<li>北京</li>
+										<li>福建</li>
+										<li>甘肃</li>
+										<li>广东</li>
+										<li>广西</li>
+										<li>贵州</li>
+										<li>海南</li>
+										<li>河北</li>
+										<li>河南</li>
+										<li>黑龙江</li>
+										<li>湖北</li>
+										<li>湖南</li>
+										<li>吉林</li>
+										<li>江苏</li>
+										<li>江西</li>
+										<li>辽宁</li>
+										<li>内蒙古</li>
+										<li>宁夏</li>
+										<li>青海</li>
+										<li>山东</li>
+										<li>山西</li>
+										<li>陕西</li>
+										<li>上海</li>
+										<li>四川</li>
+										<li>天津</li>
+										<li>西藏</li>
+										<li>新疆</li>
+										<li>云南</li>
+										<li>浙江</li>
+										<li>重庆</li>
+									</ul>
+								</div>
+								<div>
+									<ul>
+										<li>潮州</li>
+										<li>东莞</li>
+										<li>佛山</li>
+										<li>广州</li>
+										<li>河源</li>
+										<li>惠州</li>
+										<li>江门</li>
+										<li>揭阳</li>
+										<li>茂名</li>
+										<li>梅州</li>
+										<li>清远</li>
+										<li>汕头</li>
+										<li>汕尾</li>
+										<li>韶关</li>
+										<li>深圳</li>
+										<li>阳江</li>
+										<li>云浮</li>
+										<li>湛江</li>
+										<li>肇庆</li>
+										<li>中山</li>
+										<li>珠海</li>
+									</ul>
+								</div>
+								<div>
+									<ul>
+										<li>萝岗区</li>
+										<li>白云区</li>
+										<li>从化</li>
+										<li>东山区</li>
+										<li>番禺区</li>
+										<li>芳村区</li>
+										<li>海珠区</li>
+										<li>花都区</li>
+										<li>黄浦区</li>
+										<li>荔湾区</li>
+										<li>市辖区</li>
+										<li>天河区</li>
+										<li>越秀区</li>
+										<li>增城</li>
+									</ul>
+								</div>
+							</div>
+					</div>
+				</div>
+			</div>
+			<div class="carAllcheck">
+				<label for="allCheck1">
+					<input type="checkbox" id="allCheck1" class="allCheck">全选
+				</label>
+				<span>商品信息</span>
+				<span>单价（元）</span>
+				<span>件数</span>
+				<span>金额（元）</span>
+				<span>操作</span>
+			</div>
+			<div class="manageType">
+				<label for="allCheck2">
+					<input type="checkbox" id="allCheck2" class="allCheck">
+					<i class="iconfont icon-gouwuchekong"></i>
+					<span>百联联营</span>
+				</label>
+			</div>
+			<div class="carBox">
+				<ul  class="carBoxUl">
+					<!-- <li>
+						<div class="carLeftCheck">	
+							<span>·</span>
+							<input type="checkbox" class="singleCheck1">
+						</div>
+						<div class="carRight">
+							<div class="carRightTop">
+								<span>【参与满减】满520减120，最多10次</span>
+								<a href="#">查看活动></a>
+								<span class="sigleTotalPrice">￥20867.00元 减：</span>
+								<span class="sigleTotalCountPrice">￥1000.00</span>
+							</div>
+							<div class="carRightContent">
+								<div>
+									<img src="../image/list/watch1-1.jpg" alt="" class="carImg">
+								</div>
+								<span>
+									<span class="proname">
+										<span>全球购</span>
+										<a href="#" class="carProname">欧米茄 OMEGA手表 碟飞系列机械男表424.13.40....</a>
+									</span>
+								</span>
+								<span class="originalPrice">￥20867.00</span>
+								<div class="countBox">
+									<button class="carCountBtnMin">- </button>
+									<input type="text" class="count" placeholder="1">
+									<button class="carCountBtnAdd">+ </button>
+									<span>库存紧张</span>
+								</div>
+								<span class="Price">￥19867.00</span>
+								<div>
+									<a href="#">移入收藏夹</a>
+									<button class="delete">删除</button>
+								</div>
+							</div>
+						</div>
+					</li> -->
+				</ul>
+			</div>
+			<div class="carBottom">
+				<label for="allCheck1">
+					<input type="checkbox" id="allCheck1" class="allCheck">全选
+				</label>
+				<span>
+					<i class="iconfont icon-lajixiang"></i>
+					<button class="deleteCheck">删除</button>
+				</span>
+				<span>
+					<button class="clearFailedProduct">清除失效商品</button>
+				</span>
+				<span>
+					<button class="movedToFavorites">移入收藏夹</button>
+				</span>
+				<span>
+					<span>已选择</span>
+					<span class="selectCount">1</span>
+					<span>件商品</span>
+				</span>
+				<span>商品金额（不含运费）:</span>
+				<div>
+					<span class="totalPrice">￥19867.00</span>
+					<span>优惠</span>
+					<span class="totalDiscount">
+						-￥1880.00
+					</span>
+				</div>
+				<button id="accountsBtn">去结算</button>
+			</div>
+		</div>
+	</div>
+	<footer id="foot">
+		<div class="list">
+			<ul>
+				<li class="list-1">
+					<div>
+						<span>
+							<i class="iconfont icon-denglu"></i>
+						</span>
+						<span>新手入门</span>
+					</div>
+					<ul>
+						<li>购物流程</li>
+						<li>会员介绍</li>
+						<li>常见问题</li>
+						<li>发票说明</li>
+						<li>练习客服</li>
+					</ul>
+				</li>
+				<li class="list-2">
+					<div>
+						<span>
+							<i class="iconfont icon-peisong"></i>
+						</span>
+						<span>配送服务</span>
+					</div>
+					<ul>
+						<li>配送范围及运费</li>
+						<li>配送进度查询</li>
+						<li>自提服务</li>
+						<li>商品验货与签收</li>
+					</ul>
+				</li>
+				<li class="list-3">
+					<div>
+						<span>
+							<i class="iconfont icon-zhifufangshi-copy"></i>
+						</span>
+						<span>支付方式</span>
+					</div>
+					<ul>
+						<li>货到付款</li>
+						<li>在线支付</li>
+					</ul>
+				</li>
+				<li class="list-4">
+					<div>
+						<span>
+							<i class="iconfont icon-shouhoufuwu"></i>
+						</span>
+						<span>售后服务</span>
+					</div>
+					<ul>
+						<li>退换货政策</li>
+						<li>退换货流程</li>
+						<li>退款说明</li>
+					</ul>
+				</li>
+				<li class="list-5">
+					<div>
+						<span>
+							<i class="iconfont icon-shengxianshipin"></i>
+						</span>
+						<span>特色服务</span>
+					</div>
+					<ul>
+						<li>优鲜集市</li>
+						<li>生鲜随心订</li>
+						<li>精选篮筐</li>
+						<li>全球购</li>
+						<li>精品闪购</li>
+						<li>百联到家</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div class="footer-foot">
+			<ul>
+				<li>
+					<span><a href="#">关于我们</a></span>
+					<span>|</span>
+					<span><a href="#">联系我们</a></span>
+					<span>|</span>
+					<span><a href="#">加盟合作</a></span>
+					<span>|</span>
+					<span>诚征英才</span>
+					<span>|</span>
+					<span>友情链接</span>
+				</li>
+				<li>
+					<span>百联集团有限公司旗下 上海百联全渠道电子商务有限公司版权所有</span>
+					<span>|</span>
+					<span>客服电话：400-900-8800 </span>
+					<span>|</span>
+					<span>沪ICP备15028847号</span>
+				</li>
+				<li>
+					<a href="#">互联网药品信息服务资质证书编号：沪-（非营业性）-2016-0044</a>
+				</li>
+				<li>
+					<ul>
+						<li>
+							<img src="../image/index-foot-gongan.png" alt="">
+							<a href="#">沪公网安备 310101020022366号</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-wangjing.png" alt="">
+							<a href="#">网购大家评</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-gongs.png" alt="">
+							<a href="#">上海工商</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-zhizhao.png" alt="">
+							<a href="#">经营执照</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</footer>
+</body>
+</html>

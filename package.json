@@ -1,0 +1,29 @@
+{
+  "name": "program",
+  "version": "0.0.1",
+  "description": "bj_1701_program1",
+  "main": "index.js",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-rename": "^1.2.2"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.18.8",
+    "gulp-concat": "^2.6.1",
+    "gulp-uglify": "^2.1.2",
+    "http-server": "^0.10.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "bj",
+  "license": "ISC",
+  "directories": {
+    "doc": "doc"
+  },
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "blew"
+  }
+}

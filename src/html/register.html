@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>欢迎注册 百联E城</title>
+	<link rel="stylesheet" href="../css/register.css">
+	<script src="../js/lib/jquery-3.2.1.js"></script>
+	<script>
+		$(function(){
+			var $registerbtn = $('#register-btn');
+			$(':input').each(function(){
+				var $self = $(this);
+				$self.on('focus',function(){
+					$self.css('border','1px solid #0088CC');
+				})
+			})
+			
+			var key1;
+			var key2;
+			var key3;
+			var key4;
+			var key5;
+			var key6;
+			$('#usename').on('blur',function(){
+				if(!/^[a-z\d]{6,20}$/i.test($("#usename").val())){
+					$('#usename').css('border','1px solid #E6133C');
+					$('.usename-error').html('您的用户名不合法').css('color','#E6133C');
+					key1 = false;
+				}else{$('.usename-error').css('color','white');
+				   key1 = true;}
+			})
+			$('#password').on('blur',function(){
+				if(!/^\S{6,20}$/i.test($("#password").val())){
+					$('#password').css('border','1px solid #E6133C');
+					$('.password-error').html('您的密码不合法').css('color','#E6133C');
+					key2 = false;
+				}else{$('.password-error').css('color','white');key2 = true;} 
+			})
+			$('#confirmPassword').on('blur',function(){
+				if($("#confirmPassword").val() !== $("#password").val()){
+					$('#confirmPassword').css('border','1px solid #E6133C');
+					$('.confirmPassword-error').html('您的密码不一致').css('color','#E6133C');
+					key3 = false;
+				}else{$('.confirmPassword-error').css('color','white');key3 = true;}
+			})
+			$('#phone').on('blur',function(){
+				if(!/^1[34578]\d{9}$/.test($("#phone").val())){
+					$('#phone').css('border','1px solid #E6133C');
+					$('.phone-error').html('请输入正确的手机号码').css('color','#E6133C');
+					key4 = false;
+				}else{$('.phone-error').css('color','white');
+					key4 = true;}
+			})
+			$('#code-message').on('blur',function(){
+				if(!/^\d{6}$/.test($("#code-message").val())){
+					$('#code-message').css('border','1px solid #E6133C');
+					$('.code-message-error').html('请输入正确的验证码').css('color','#E6133C');
+					key5 = false;
+				}else{$('.code-message-error').css('color','white');
+				key5 = true;}
+			})
+			$('#email').on('blur',function(){
+				if(!/^[\w\-\.]+@[a-z\d\-]+(\.[a-z]+){1,2}$/.test($("#email").val())){
+					$('#email').css('border','1px solid #E6133C');
+					$('.email-error').html('请输入正确的邮箱').css('color','#E6133C');
+					key6 = false;
+				}else{$('.email-error').css('color','white');
+					key6 = true;
+				}
+			})
+			//所有必填项目填写完成  跳转到首页代表注册成功（通过数据库实现）
+			//有个千古难题： 我的首页获取不到这里的cookie 我要怎么把注册或者登陆成功的消息 通过cookie 显示在主页上？？？？？？？？？？？？？？？？
+			$registerbtn.on('click',function(){
+				if(key1 == true && key2 == true && key3 == true && key4 == true && key5 == true){
+					$.post('../php/register.php',{
+						usename: $('#usename').val(),
+						password: $('#password').val(),
+						phone: $('#phone').val(),
+						email: $('#email').val()
+					}, function(response){
+						console.log(response)
+						var $obj = eval('(' + response + ')');
+						if($obj.state){
+							//就想问 我的alert被页面吃了么？？？？？？怎么会不显示？？？？？
+							//alert(恭喜您注册成功！);
+							window.location.href="http://localhost/bl_com/index.html#";
+						} else {
+							alert($obj.message);
+						}
+					})	
+					
+				}
+			})
+
+			//点击logo 回到首页
+			$('.goHome').on('click',function(){
+				window.location.href = 'http://localhost/bl_com/index.html#';
+			})
+			
+		})
+	</script>
+</head>
+<body>
+	<header>
+		<img src="../image/header-logo.png" class="goHome">
+		<div>
+			<h2>用户注册</h2>
+		</div>
+	</header>
+	<div class="content-register-middle">
+		<div class="container-register">
+			<div class="container-register-head">
+				<span>您好，感谢您加入i百联</span>
+				<a href="http://localhost/bl_com/html/log.html#">登陆</a>
+				<span>如有账号，请点击</span>
+			</div>
+			<div class="container-register-body">
+
+				<label for="usename">
+					<p>*</p>用户名:&nbsp; <input type="text" placeholder="6-12位字符，支持字母或字母与数字组合" id="usename" name="usename"><div class="usename-error error" ></div>
+				</label>
+				<i class="iconfont icon-yonghuming"></i>
+
+				<label for="password">
+					<p>*</p>密码:&nbsp; <input placeholder="6-12位字符，建议使用字母、符号和数字组合" type="password" id="password" name="password"><div class="password-error error"></div>
+				</label>
+				<i class="iconfont icon-mima"></i>
+
+				<label for="confirmPassword">
+					<p>*</p>确认密码:&nbsp; <input placeholder="请再次输入密码" type="password" id="confirmPassword" name="confirmPassword"><div class="confirmPassword-error error"></div>
+				</label>
+				<i class="iconfont icon-mima"></i>
+				
+				<label for="phone">
+					<p>*</p>手机号:&nbsp; <input type="text" placeholder="请输入11位手机号码" id="phone" name="phone"><div class="phone-error error"></div>
+				</label>
+				<i class="iconfont icon-shouji"></i>
+
+				<label for="code">
+					验证码:&nbsp;
+					<input type="text" placeholder="请输入验证码" id="code" name="code"><img src="../image/register.png" alt=""><a href="#">换一张</a> 
+				</label>
+				<i class="iconfont icon-mima"></i>
+
+				<label for="code-message">
+					<p>*</p>短信验证码:&nbsp; <input placeholder="请输入短信验证码" type="text" id="code-message" name="code-message"><div class="code-message-error error"></div>
+				</label>
+				<i class="iconfont icon-mima"></i>
+
+				<button>获取验证码</button>
+
+				<label for="email">
+					电子邮箱:&nbsp; <input placeholder="请输入有效邮箱" type="text" id="email" name="email"><div class="email-error error"></div>
+				</label>
+				<i class="iconfont icon-youjian1"></i>
+				
+				<input type="checkbox" name="xieyi" checked >
+				<span>我已阅读并同意</span>
+				<a href="#">《百联通会员注册协议》</a>
+				
+				<button id="register-btn">立即注册 完成绑定</button>
+			</div>
+		</div>
+	</div>
+	<footer id="foot">
+		<div class="footer-foot">
+			<ul>
+				<li>
+					<span><a href="#">关于我们</a></span>
+					<span>|</span>
+					<span><a href="#">联系我们</a></span>
+					<span>|</span>
+					<span><a href="#">加盟合作</a></span>
+					<span>|</span>
+					<span>诚征英才</span>
+					<span>|</span>
+					<span>友情链接</span>
+				</li>
+				<li>
+					<span>百联集团有限公司旗下 上海百联全渠道电子商务有限公司版权所有</span>
+					<span>|</span>
+					<span>客服电话：400-900-8800 </span>
+					<span>|</span>
+					<span>沪ICP备15028847号</span>
+				</li>
+				<li>
+					<a href="#">互联网药品信息服务资质证书编号：沪-（非营业性）-2016-0044</a>
+				</li>
+				<li>
+					<ul>
+						<li>
+							<img src="../image/index-foot-gongan.png" alt="">
+							<a href="#">沪公网安备 310101020022366号</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-wangjing.png" alt="">
+							<a href="#">网购大家评</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-gongs.png" alt="">
+							<a href="#">上海工商</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-zhizhao.png" alt="">
+							<a href="#">经营执照</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</footer>
+</body>
+</html>

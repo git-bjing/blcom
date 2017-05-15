@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>欢迎登陆 百联E城</title>
+	<link rel="stylesheet" href="../css/log.css">
+	<link rel="stylesheet" href="../css/index-foot.css">
+	<script src="../js/lib/jquery-3.2.1.js"></script>
+	<script>
+		$(function(){
+			//有个千古难题： 我的首页获取不到这里的cookie 我要怎么把注册或者登陆成功的消息 通过cookie 显示在主页上？？？？？？？？？？？？？？？？
+		    $('.btn-log').click(function(){
+		        $.post('../php/login.php',{
+		            usename: $('#usename').val(),
+		            password: $('#password').val()
+		        }, function(response){
+		            var $obj = eval('(' + response + ')');
+		            if($obj.state){
+		                window.location.href = 'http://localhost/bl_com/#';
+		            } else {
+		                $.alert($obj.message);
+		            }
+		        })        
+		    })
+
+		    //点击logo 回到首页
+			$('.goHome').on('click',function(){
+				window.location.href = 'http://localhost/bl_com/index.html#';
+			})
+
+
+	    })
+	</script>
+</head>
+<body>
+	<header>
+		<img src="../image/header-logo.png" class="goHome">
+		<div>
+			<h2>欢迎登陆</h2>
+		</div>
+	</header>
+	<div class="content">
+		<img src="../image/log-left.png" alt="">
+		<div class="login">
+			<div>
+				<span>会员登陆</span>
+				<a href="http://localhost/bl_com/html/register.html#">注册新账号</a>
+			</div>
+			<input type="text" placeholder="用户名" id="usename">
+			<i class="iconfont icon-yonghuming"></i>
+			<input type="password" placeholder="密码" id="password">
+			<i class="iconfont icon-mima"></i>
+			<a href="#">忘记密码？</a>
+			<button class="btn-log">登 陆</button>
+			<span>—————————其他账号联合登陆————————</span>
+			<div>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+		<img src="../image/log-right.png" alt="">
+	</div>
+	<footer id="foot">
+		<div class="footer-foot">
+			<ul>
+				<li>
+					<span><a href="#">关于我们</a></span>
+					<span>|</span>
+					<span><a href="#">联系我们</a></span>
+					<span>|</span>
+					<span><a href="#">加盟合作</a></span>
+					<span>|</span>
+					<span>诚征英才</span>
+					<span>|</span>
+					<span>友情链接</span>
+				</li>
+				<li>
+					<span>百联集团有限公司旗下 上海百联全渠道电子商务有限公司版权所有</span>
+					<span>|</span>
+					<span>客服电话：400-900-8800 </span>
+					<span>|</span>
+					<span>沪ICP备15028847号</span>
+				</li>
+				<li>
+					<a href="#">互联网药品信息服务资质证书编号：沪-（非营业性）-2016-0044</a>
+				</li>
+				<li>
+					<ul>
+						<li>
+							<img src="../image/index-foot-gongan.png" alt="">
+							<a href="#">沪公网安备 310101020022366号</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-wangjing.png" alt="">
+							<a href="#">网购大家评</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-gongs.png" alt="">
+							<a href="#">上海工商</a>
+						</li>
+						<li>
+							<img src="../image/index-foot-zhizhao.png" alt="">
+							<a href="#">经营执照</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</footer>
+</body>
+</html>

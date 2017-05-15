@@ -1,0 +1,338 @@
+@import 'common';
+
+#top{
+	.header{
+		border-bottom:1px solid #ddd;
+		.container{
+			&>span{
+				display:inline-block;
+				float:right;
+				padding-top:70px;
+				a{color:$mainColor;
+					font-weight:bold;
+				}
+				a:hover{text-decoration:underline;}
+			}
+		}
+	}
+}
+.carBody{
+	.container{
+		width: 990px;
+		input{height: 12px;width: 12px;margin-right:10px;
+			}
+		.carTop{
+			height: 50px;
+			width: 100%;
+			border-bottom:1px solid #ddd;
+			h4{
+				display:inline-block;
+				float:left;
+				font-size:18px;
+				margin-top:20px;
+				color:#333;
+				padding-bottom:4px;
+				border-bottom:2px solid #333;
+			}
+			&>div:nth-child(2){
+				height: 35px;line-height: 29px;
+				margin-top:10px;
+				position:relative;
+				float:right;
+				&>p{display:inline-block;
+						width: 50px;color:#999999;
+					}
+				.LacationTab{
+					display:inline-block;float:right;
+					height: 33px;margin-right:8px;
+					margin-left:8px;
+					&>span{display:inline-block;
+						height: 33px;width: 120px;
+						border:1px solid #999999;
+						text-align:center;
+						i{font-size:8px;}									
+					}
+				}
+				.tab{
+					background-color: white;
+					z-index:99;
+					height: 315px;width: 382px;
+					padding:10px;border:1px solid #999999;
+					display:none;
+					position:absolute;
+					top:32px;
+					left:-204px;
+					.title{
+						overflow:hidden;
+						span{display:inline-block;
+							width: 66px;height: 32px;
+							text-align:center;
+							line-height: 34px;
+							border:1px solid #999999;
+							border-top:2px solid #999999;
+							border-bottom:1px solid #fff;;
+						}
+						span.active{border-top:2px solid $mainColor;}
+					}
+					.content{
+						border-top:1px solid #999999;
+						padding:12px;position:relative;
+						padding-top:18px;
+						height: 100%;
+						div:nth-child(2),div:nth-child(3){
+							display:none;
+						}
+						div{
+							position:absolute;
+							top:0;left:0;
+							height: 100%;
+							ul{
+								height: 100%;width: 100%;
+								li{
+									display:inline-block;
+									height: 30px;width: 40px;
+									text-align:center;
+									line-height: 30px;
+									margin-left:35px;
+								}
+								li:hover{background-color:$mainColor;
+									color:#fff;
+								}
+							}
+						}
+					}
+				}
+			}	
+		}	
+		.carAllcheck{
+			height: 45px;
+			border-bottom:1px solid #ddd;
+			padding-left:15px;
+			label{
+				display:inline-block;
+				height:45px;
+				line-height: 45px;
+				width: 129px;
+			}
+			span{display:inline-block;}
+			span:nth-child(2){width: 390px;}
+			span:nth-child(3){width: 138px;}
+			span:nth-child(4){width: 102px;}
+			span:nth-child(5){width: 130px;}
+		}
+		.manageType{
+			height: 38px;padding-left:15px;
+			margin-top:13px;width: 100%;
+			border-bottom:1px solid #ddd;
+			line-height: 38px;
+		}
+		.carBox{
+			height: 100%;
+			ul{
+				li{
+					height: 150px;
+					background-color: #FFFAF1;
+
+					border-bottom:1px solid #ddd;
+					.carLeftCheck{
+						display:inline-block;
+						float:left;
+						width: 38px;height: 100%;
+						text-align:center;
+						span{display:inline-block;
+							font-size:27px;width: 100%;
+							height: 40px;color:#999;
+						}
+						input{margin-right:0;margin-top:14px;}
+					}
+					.carRight{
+						width: 948px;height: 100%;
+						display:inline-block;
+						float:left;
+						.carRightTop{
+							height: 40px;
+							width: 100%;border-bottom:1px dotted #ddd;
+							line-height: 40px;
+							span,a{display:inline-block;}
+							a{width: 540px;color:#3F95DF;}
+							a:hover{text-decoration:underline;}
+							span:nth-child(4){
+								color:$mainColor;
+							}
+						}
+						.carRightContent{
+							padding-top:15px;
+							&>div:nth-child(1){
+								display:inline-block;
+								float:left;
+								width: 92px;height: 100px;
+								padding-left:4px;
+								img{width: 60px;
+									border:1px solid #ddd;
+								}
+							}
+							&>span:nth-child(2){
+								width: 405px;display:inline-block;
+								height: 100px;float:left;
+								.proname{
+									display:inline-block;
+									width: 200px;
+									&>span{
+										display:inline-block;
+										text-align:center;
+										line-height: 17px;
+										border-radius:2px 2px 2px 2px;
+										width: 42px;
+										height: 17px;
+										color:#fff;
+										background-color:#8859CD;
+									}
+									a:hover{text-decoration:underline;}
+								}
+							}
+							.originalPrice{
+								display:inline-block;
+								width: 122px;height: 100px;
+								float:left;
+							}
+							.countBox{
+								position:relative;
+								color:#333333;
+								float:left;
+								height: 100px;
+								width: 120px;
+								button{width: 18px;
+									height: 26px;text-align:center;
+									padding:0;
+									background-color: #F0F0F0;
+									border:1px solid #F0F0F0;
+									position:absolute;
+								}
+								button:hover{border:1px solid #999;}
+								.carCountBtnMin{top:0;left:0px;}
+								.count{display:inline-block;
+									width: 42px;height: 26px;
+									line-height: 26px;
+									margin:0;position:absolute;
+									border:1px solid #999;
+									background-color: #FFF;
+									top:0;left:18px;text-align:center;
+								}
+								.carCountBtnAdd{top:0;left:60px;}
+								span:nth-child(4){
+									display:inline-block;
+									width: 78px;height: 19px;position:absolute;
+									top:25px;left:0px;line-height: 19px;
+									text-align:center;
+									border:1px solid #FFD6E0;color:$mainColor;
+									border-top:0;
+								}
+							}
+							.Price{
+								display:inline-block;
+								float:left;
+								height: 100px;
+								width: 132px;
+								color:$mainColor;
+								font-weight:bold;
+							}
+							div:nth-child(6){
+								display:inline-block;
+								float:left;
+								width:77px;
+								a{color:#333;padding-left:7px;}
+								a:hover{color:$mainColor;
+									text-decoration:underline;
+								}
+								.delete{
+									background-color: #FFFAF1;
+									border:1px solid #FFFAF1;
+									height: 20px;color:#999;
+								}
+								.delete:hover{
+									color:$mainColor;
+									text-decoration:underline;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		.carBottom{
+			margin-top:20px;
+			height: 50px;
+			width: 100%;
+			background-color: #F3F3F3;
+			margin-bottom:30px;
+			box-shadow: 2px 2px 2px 2px #CCC;
+			padding-left:15px;
+			label{
+				display:inline-block;
+				height:50px;
+				line-height: 50px;
+				width: 54px;
+				float:left;color:#333;
+				input{margin-right:2px;}
+			}
+			&>span:nth-child(2){display:inline-block;
+				height:50px;
+				line-height: 50px;
+				width: 60px;
+				float:left;color:#666;
+				i{font-size:8px;}
+				button{width: 30px;height: 25px;
+					padding:0;
+					border:0;color:#666;
+					background-color: #F3F3F3;
+				}
+			}
+			&>span:nth-child(3){display:inline-block;
+				width: 90px;
+				height:50px;float:left;
+				line-height: 50px;
+				.clearFailedProduct{
+					width: 90px;height: 25px;
+					padding:0;
+					border:0;color:#666;
+					background-color: #F3F3F3;
+				}
+			}
+			&>span:nth-child(4){display:inline-block;
+				width: 280px;float:left;
+				height:50px;
+				line-height: 50px;
+				.movedToFavorites{
+					width: 90px;height: 25px;
+					padding:0;
+					border:0;color:#666;
+					background-color: #F3F3F3;
+				}
+			}
+			&>span:nth-child(5){display:inline-block;
+				width: 127px;height:50px;float:left;
+				line-height: 50px;
+				.selectCount{color:$mainColor;}
+			}
+			&>span:nth-child(6){display:inline-block;
+				color:#666;width: 132px;height:50px;float:left;
+				line-height: 50px;
+			}
+			&>div:nth-child(7){display:inline-block;float:left;
+				width: 107px;height:50px;
+				span{display:inline-block;}
+				.totalPrice{width: 107px;height: 29px;
+					line-height: 29px;font-size:18px;
+					color:$mainColor;
+				}
+				span:nth-child(2){color:#999;}
+			}
+			#accountsBtn{
+					width: 125px;height: 50px;
+					padding:0;font-size:22px;
+					font-weight:bold;
+					border:0;color:#fff;
+					background-color: $mainColor;}
+		}
+	}
+}
